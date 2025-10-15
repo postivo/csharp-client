@@ -17,7 +17,7 @@ namespace Postivo.Models.Components
     /// <summary>
     /// Additional shipment settings.
     /// </summary>
-    public class RequestOptions
+    public class ShipmentOptions
     {
 
         /// <summary>

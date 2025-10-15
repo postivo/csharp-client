@@ -24,7 +24,7 @@ namespace Postivo.Models.Components
 
         public string Value { get; private set; }
 
-        public static OptionsType RequestOptions { get { return new OptionsType("RequestOptions"); } }
+        public static OptionsType ShipmentOptions { get { return new OptionsType("ShipmentOptions"); } }
 
         public static OptionsType Null { get { return new OptionsType("null"); } }
 
@@ -32,7 +32,7 @@ namespace Postivo.Models.Components
         public static implicit operator String(OptionsType v) { return v.Value; }
         public static OptionsType FromString(string v) {
             switch(v) {
-                case "RequestOptions": return RequestOptions;
+                case "ShipmentOptions": return ShipmentOptions;
                 case "null": return Null;
                 default: throw new ArgumentException("Invalid value for OptionsType");
             }
@@ -62,15 +62,15 @@ namespace Postivo.Models.Components
         }
 
         [SpeakeasyMetadata("form:explode=true")]
-        public RequestOptions? RequestOptions { get; set; }
+        public ShipmentOptions? ShipmentOptions { get; set; }
 
         public OptionsType Type { get; set; }
-        public static Options CreateRequestOptions(RequestOptions requestOptions)
+        public static Options CreateShipmentOptions(ShipmentOptions shipmentOptions)
         {
-            OptionsType typ = OptionsType.RequestOptions;
+            OptionsType typ = OptionsType.ShipmentOptions;
 
             Options res = new Options(typ);
-            res.RequestOptions = requestOptions;
+            res.ShipmentOptions = shipmentOptions;
             return res;
         }
 
@@ -98,14 +98,14 @@ namespace Postivo.Models.Components
 
                 try
                 {
-                    return new Options(OptionsType.RequestOptions)
+                    return new Options(OptionsType.ShipmentOptions)
                     {
-                        RequestOptions = ResponseBodyDeserializer.DeserializeUndiscriminatedUnionMember<RequestOptions>(json)
+                        ShipmentOptions = ResponseBodyDeserializer.DeserializeUndiscriminatedUnionMember<ShipmentOptions>(json)
                     };
                 }
                 catch (ResponseBodyDeserializer.MissingMemberException)
                 {
-                    fallbackCandidates.Add((typeof(RequestOptions), new Options(OptionsType.RequestOptions), "RequestOptions"));
+                    fallbackCandidates.Add((typeof(ShipmentOptions), new Options(OptionsType.ShipmentOptions), "ShipmentOptions"));
                 }
                 catch (ResponseBodyDeserializer.DeserializationException)
                 {
@@ -154,9 +154,9 @@ namespace Postivo.Models.Components
                     return;
                 }
 
-                if (res.RequestOptions != null)
+                if (res.ShipmentOptions != null)
                 {
-                    writer.WriteRawValue(Utilities.SerializeJSON(res.RequestOptions));
+                    writer.WriteRawValue(Utilities.SerializeJSON(res.ShipmentOptions));
                     return;
                 }
             }

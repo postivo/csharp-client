@@ -3,8 +3,8 @@
 
 ## Supported Types
 
-### RequestOptions
+### ShipmentOptions
 
 ```csharp
-Options.CreateRequestOptions(/* values here */);
+Options.CreateShipmentOptions(/* values here */);
 ```

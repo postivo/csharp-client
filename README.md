@@ -98,8 +98,8 @@ Shipment req = new Shipment() {
             ),
         }
     ),
-    Options = Options.CreateRequestOptions(
-        new RequestOptions() {
+    Options = Options.CreateShipmentOptions(
+        new ShipmentOptions() {
             PredefinedConfigId = 2670,
         }
     ),
@@ -154,8 +154,8 @@ Shipment req = new Shipment() {
             ),
         }
     ),
-    Options = Options.CreateRequestOptions(
-        new RequestOptions() {
+    Options = Options.CreateShipmentOptions(
+        new ShipmentOptions() {
             PredefinedConfigId = 2670,
         }
     ),

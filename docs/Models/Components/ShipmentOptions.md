@@ -1,4 +1,4 @@
-# RequestOptions
+# ShipmentOptions
 
 Additional shipment settings.
 
