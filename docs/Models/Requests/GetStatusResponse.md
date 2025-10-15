@@ -1,0 +1,11 @@
+# GetStatusResponse
+
+
+## Fields
+
+| Field                                                                                       | Type                                                                                        | Required                                                                                    | Description                                                                                 |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `HttpMeta`                                                                                  | [HTTPMetadata](../../Models/Components/HTTPMetadata.md)                                     | :heavy_check_mark:                                                                          | N/A                                                                                         |
+| `StatusDetails`                                                                             | List<[StatusDetails](../../Models/Components/StatusDetails.md)>                             | :heavy_minus_sign:                                                                          | The request was processed successfully. Shipment details are included in the response body. |
+| `ErrorResponse`                                                                             | [Models.Components.ErrorResponse](../../Models/Components/ErrorResponse.md)                 | :heavy_minus_sign:                                                                          | Invalid request.                                                                            |
+| `Headers`                                                                                   | Dictionary<String, List<*string*>>                                                          | :heavy_check_mark:                                                                          | N/A                                                                                         |

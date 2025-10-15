@@ -1,0 +1,10 @@
+# ListMetadataResponse
+
+
+## Fields
+
+| Field                                                                                       | Type                                                                                        | Required                                                                                    | Description                                                                                 |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `HttpMeta`                                                                                  | [HTTPMetadata](../../Models/Components/HTTPMetadata.md)                                     | :heavy_check_mark:                                                                          | N/A                                                                                         |
+| `MetadataResponse`                                                                          | [MetadataResponse](../../Models/Components/MetadataResponse.md)                             | :heavy_minus_sign:                                                                          | The request was processed successfully. Metadata details are included in the response body. |
+| `ErrorResponse`                                                                             | [Models.Components.ErrorResponse](../../Models/Components/ErrorResponse.md)                 | :heavy_minus_sign:                                                                          | Invalid request.                                                                            |

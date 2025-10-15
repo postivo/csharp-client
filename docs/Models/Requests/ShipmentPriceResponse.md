@@ -1,0 +1,11 @@
+# ShipmentPriceResponse
+
+
+## Fields
+
+| Field                                                                                     | Type                                                                                      | Required                                                                                  | Description                                                                               |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `HttpMeta`                                                                                | [HTTPMetadata](../../Models/Components/HTTPMetadata.md)                                   | :heavy_check_mark:                                                                        | N/A                                                                                       |
+| `ShipmentPrices`                                                                          | List<[ShipmentPrice](../../Models/Components/ShipmentPrice.md)>                           | :heavy_minus_sign:                                                                        | The request was processed successfully. Check each shipment’s price in the response body. |
+| `ErrorResponse`                                                                           | [Models.Components.ErrorResponse](../../Models/Components/ErrorResponse.md)               | :heavy_minus_sign:                                                                        | Invalid request.                                                                          |
+| `Headers`                                                                                 | Dictionary<String, List<*string*>>                                                        | :heavy_check_mark:                                                                        | N/A                                                                                       |
