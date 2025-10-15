@@ -23,13 +23,13 @@ namespace Postivo.Models.Components
         /// Recipient data for a single shipment. For one recipient, provide a `RecipientInline`, `RecipientFromAddressBook`, or `RecipientFromAddressBookByExternalId` object. For multiple recipients, provide an array of these objects (1–50).
         /// </summary>
         [JsonProperty("recipients", NullValueHandling = NullValueHandling.Include)]
-        public Recipients2 Recipients { get; set; } = default!;
+        public ShipmentRecipients Recipients { get; set; } = default!;
 
         /// <summary>
-        /// Document payload to print and enclose. For a single document, provide `DocumentPdf` or `DocumentLibrary`. For multiple documents, provide an array of `DocumentPdf`, `DocumentLibrary`, or `DocumentMock` objects (1–20).
+        /// Document payload to print and enclose into shipment. For a single document, provide `DocumentPdf`, `DocumentLibrary`, or `DocumentMock` (for checking the price only). For multiple documents, provide an array of `DocumentPdf`, `DocumentLibrary`, or `DocumentMock` objects (1–20).
         /// </summary>
         [JsonProperty("documents", NullValueHandling = NullValueHandling.Include)]
-        public Documents2 Documents { get; set; } = default!;
+        public ShipmentDocuments Documents { get; set; } = default!;
 
         [JsonProperty("options", NullValueHandling = NullValueHandling.Include)]
         public Options? Options { get; set; } = null;

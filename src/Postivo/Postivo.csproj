@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>Postivo</PackageId>
-    <Version>0.0.3</Version>
+    <Version>0.0.34</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>POSTIVO.PL</Authors>
     <Copyright>Copyright (c) POSTIVO.PL 2025</Copyright>
@@ -18,10 +18,12 @@
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\NUGET.md" Pack="true" PackagePath="README.md"/>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
     <None Include="..\..\docs\**\*" Pack="true" PackagePath="\docs"  CopyToOutputDirectory="PreserveNewest"/>
   </ItemGroup>
 

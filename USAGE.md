@@ -11,29 +11,31 @@ using System.Collections.Generic;
 var sdk = new Client(bearer: "<YOUR API ACCESS TOKEN>");
 
 Shipment req = new Shipment() {
-    Recipients = Recipients2.CreateRecipientInline(
-        new RecipientInline() {
-            Name = "Jan Nowak",
-            Name2 = "Firma testowa Sp. z o.o.",
-            Address = "ul. Testowa",
-            HomeNumber = "23",
-            FlatNumber = "2",
-            PostCode = "00-999",
-            City = "Warszawa",
-            PhoneNumber = "+48666666666",
-            Postscript = "Komunikat",
-            CustomId = "1234567890",
-        }
+    Recipients = ShipmentRecipients.CreateRecipients(
+        Recipients.CreateRecipientInline(
+            new RecipientInline() {
+                Name = "Jan Nowak",
+                Name2 = "Firma testowa Sp. z o.o.",
+                Address = "ul. Testowa",
+                HomeNumber = "23",
+                FlatNumber = "2",
+                PostCode = "00-999",
+                City = "Warszawa",
+                PhoneNumber = "+48666666666",
+                Postscript = "Komunikat",
+                CustomId = "1234567890",
+            }
+        )
     ),
-    Documents = Documents2.CreateArrayOfDocuments1(
-        new List<Documents1>() {
-            Documents1.CreateDocumentPdf(
+    Documents = ShipmentDocuments.CreateArrayOfDocuments(
+        new List<Documents>() {
+            Documents.CreateDocumentPdf(
                 new DocumentPdf() {
                     FileStream = "<document_1 content encoded to base64>",
                     FileName = "document1.pdf",
                 }
             ),
-            Documents1.CreateDocumentPdf(
+            Documents.CreateDocumentPdf(
                 new DocumentPdf() {
                     FileStream = "<document_2 content encoded to base64>",
                     FileName = "document2.pdf",
@@ -65,29 +67,31 @@ using System.Collections.Generic;
 var sdk = new Client(bearer: "<YOUR API ACCESS TOKEN>");
 
 Shipment req = new Shipment() {
-    Recipients = Recipients2.CreateRecipientInline(
-        new RecipientInline() {
-            Name = "Jan Nowak",
-            Name2 = "Firma testowa Sp. z o.o.",
-            Address = "ul. Testowa",
-            HomeNumber = "23",
-            FlatNumber = "2",
-            PostCode = "00-999",
-            City = "Warszawa",
-            PhoneNumber = "+48666666666",
-            Postscript = "Komunikat",
-            CustomId = "1234567890",
-        }
+    Recipients = ShipmentRecipients.CreateRecipients(
+        Recipients.CreateRecipientInline(
+            new RecipientInline() {
+                Name = "Jan Nowak",
+                Name2 = "Firma testowa Sp. z o.o.",
+                Address = "ul. Testowa",
+                HomeNumber = "23",
+                FlatNumber = "2",
+                PostCode = "00-999",
+                City = "Warszawa",
+                PhoneNumber = "+48666666666",
+                Postscript = "Komunikat",
+                CustomId = "1234567890",
+            }
+        )
     ),
-    Documents = Documents2.CreateArrayOfDocuments1(
-        new List<Documents1>() {
-            Documents1.CreateDocumentPdf(
+    Documents = ShipmentDocuments.CreateArrayOfDocuments(
+        new List<Documents>() {
+            Documents.CreateDocumentPdf(
                 new DocumentPdf() {
                     FileStream = "<document_1 content encoded to base64>",
                     FileName = "document1.pdf",
                 }
             ),
-            Documents1.CreateDocumentPdf(
+            Documents.CreateDocumentPdf(
                 new DocumentPdf() {
                     FileStream = "<document_2 content encoded to base64>",
                     FileName = "document2.pdf",
