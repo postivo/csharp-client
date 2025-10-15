@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>Postivo</PackageId>
-    <Version>0.0.34</Version>
+    <Version>0.0.35</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>POSTIVO.PL</Authors>
     <Copyright>Copyright (c) POSTIVO.PL 2025</Copyright>

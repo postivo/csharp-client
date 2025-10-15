@@ -99,7 +99,7 @@ namespace Postivo
     {
         public SDKConfig SDKConfiguration { get; private set; }
         private const string _language = "csharp";
-        private const string _sdkVersion = "0.0.34";
+        private const string _sdkVersion = "0.0.35";
         private const string _sdkGenVersion = "2.723.11";
         private const string _openapiDocVersion = "1.0.1";
         public IByExtId ByExtId { get; private set; }
