@@ -52,7 +52,7 @@ namespace Postivo
             Client = client ?? new ClientHttpClient();
             ServerUrl = "";
             ServerName = null;
-            UserAgent = "speakeasy-sdk/csharp 0.0.35 2.723.11 1.0.1 Postivo";
+            UserAgent = "speakeasy-sdk/csharp 0.0.36 2.723.11 1.0.1 Postivo";
             SecuritySource = null;
             Hooks = new SDKHooks();
             RetryConfig = null;
