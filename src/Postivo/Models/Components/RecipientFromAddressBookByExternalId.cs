@@ -25,10 +25,10 @@ namespace Postivo.Models.Components
         public string ExtId { get; set; } = default!;
 
         /// <summary>
-        /// Set to true to fetch recipient data by external ID from a main account’s shared Address Book.
+        /// Set to true to fetch recipient data by external ID from inherited main account’s Address Book.
         /// </summary>
-        [JsonProperty("from_shared")]
-        public bool? FromShared { get; set; } = false;
+        [JsonProperty("inherited")]
+        public bool? Inherited { get; set; } = false;
 
         /// <summary>
         /// Custom shipment ID assigned by the user.

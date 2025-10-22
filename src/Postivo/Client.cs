@@ -41,9 +41,9 @@ namespace Postivo
         public SDKConfig SDKConfiguration { get; private set; }
 
         private const string _language = "csharp";
-        private const string _sdkVersion = "0.0.41";
-        private const string _sdkGenVersion = "2.723.11";
-        private const string _openapiDocVersion = "1.0.1";
+        private const string _sdkVersion = "0.1.0";
+        private const string _sdkGenVersion = "2.728.0";
+        private const string _openapiDocVersion = "1.0.2";
         public IAccounts Accounts { get; private set; }
         public IAddressBook AddressBook { get; private set; }
         public IShipments Shipments { get; private set; }
@@ -69,6 +69,16 @@ namespace Postivo
             Senders = new Senders(SDKConfiguration);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the SDK with optional configuration parameters.
+        /// </summary>
+        /// <param name="bearer">The security configuration to use for API requests. If provided, this will be used as a static security configuration.</param>
+        /// <param name="bearerSource">A function that returns the security configuration dynamically. This takes precedence over the static security parameter if both are provided.</param>
+        /// <param name="server">The server to use from the predefined server list.</param>
+        /// <param name="serverUrl">A custom server URL to use instead of the predefined server list. If provided with urlParams, the URL will be templated with the provided parameters.</param>
+        /// <param name="urlParams">A dictionary of parameters to use for templating the serverUrl. Only used when serverUrl is provided.</param>
+        /// <param name="client">A custom HTTP client implementation to use for making API requests. If not provided, the default ClientHttpClient will be used.</param>
+        /// <param name="retryConfig">Configuration for retry behavior when API requests fail. Defines retry strategies, backoff policies, and maximum retry attempts.</param>
         public Client(string? bearer = null, Func<string>? bearerSource = null, SDKConfig.Server? server = null, string? serverUrl = null, Dictionary<string, string>? urlParams = null, IClientHttpClient? client = null, RetryConfig? retryConfig = null)
         {
 

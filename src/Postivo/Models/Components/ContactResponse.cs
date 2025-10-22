@@ -90,5 +90,11 @@ namespace Postivo.Models.Components
         /// </summary>
         [JsonProperty("id")]
         public long Id { get; set; } = default!;
+
+        /// <summary>
+        /// Indicates whether the contact data was inherited from a main account’s shared Address Book.
+        /// </summary>
+        [JsonProperty("inherited")]
+        public bool? Inherited { get; set; }
     }
 }
