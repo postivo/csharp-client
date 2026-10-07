@@ -1,5 +1,4 @@
 # Shipments
-(*Shipments*)
 
 ## Overview
 
@@ -95,9 +94,139 @@ Send a shipment to one or multiple recipients in a single request. Provide a `Sh
 
 The system accepts up to **50** recipients per call. For larger volumes, split the operation into multiple requests.
 
-### Example Usage
+### Example Usage: advanced_config
 
-<!-- UsageSnippet language="csharp" operationID="shipmentDispatch" method="post" path="/shipment" -->
+<!-- UsageSnippet language="csharp" operationID="shipmentDispatch" method="post" path="/shipment" example="advanced_config" -->
+```csharp
+using Postivo;
+using Postivo.Models.Components;
+using System;
+
+var sdk = new Client(bearer: "<YOUR API ACCESS TOKEN>");
+
+Shipment req = new Shipment() {
+    Recipients = ShipmentRecipients.CreateRecipients(
+        Recipients.CreateRecipientInline(
+            new RecipientInline() {
+                Name = "Jan Nowak",
+                Name2 = "Firma testowa Sp. z o.o.",
+                Address = "ul. Testowa",
+                HomeNumber = "23",
+                FlatNumber = "2",
+                PostCode = "00-999",
+                City = "Warszawa",
+                PhoneNumber = "+48666666666",
+                Postscript = "Komunikat",
+                CustomId = "1234567890",
+            }
+        )
+    ),
+    Documents = ShipmentDocuments.CreateDocuments(
+        Documents.CreateDocumentPdf(
+            new DocumentPdf() {
+                FileStream = "<document content encoded to base64>",
+                FileName = "document.pdf",
+            }
+        )
+    ),
+    Options = Options.CreateShipmentOptions(
+        new ShipmentOptions() {
+            PredefinedConfigId = 2670,
+            InlineConfig = InlineConfigUnion.CreateInlineConfig(
+                new InlineConfig() {
+                    CarrierId = 4,
+                    ServiceId = 16,
+                    PaperId = 1,
+                    ColorPrint = true,
+                    DuplexPrint = false,
+                    EnvelopeId = 454,
+                    EnvelopeColorPrint = true,
+                }
+            ),
+            SenderId = 1,
+            DispatchDate = DateOnly.Parse("2025-10-21"),
+            Callback = CallbackUnion.CreateCallback(
+                new Callback() {
+                    Url = "https://example.com/test",
+                    UserToken = "75gh28hugjy8gfv6...",
+                }
+            ),
+            MiscInfo = MiscInfoUnion.CreateMiscInfo(
+                new MiscInfo() {
+                    Mpk = "dział sprzedaży",
+                    OrderName = "Wysyłka zaproszeń do Klientów",
+                }
+            ),
+            RotateDocuments = true,
+        }
+    ),
+};
+
+var res = await sdk.Shipments.DispatchAsync(req);
+
+// handle response
+```
+### Example Usage: multi
+
+<!-- UsageSnippet language="csharp" operationID="shipmentDispatch" method="post" path="/shipment" example="multi" -->
+```csharp
+using Postivo;
+using Postivo.Models.Components;
+using System.Collections.Generic;
+
+var sdk = new Client(bearer: "<YOUR API ACCESS TOKEN>");
+
+Shipment req = new Shipment() {
+    Recipients = ShipmentRecipients.CreateArrayOfRecipients(
+        new List<Recipients>() {
+            Recipients.CreateRecipientInline(
+                new RecipientInline() {
+                    Name = "Jan Nowak",
+                    Name2 = "Firma testowa Sp. z o.o.",
+                    Address = "ul. Testowa",
+                    HomeNumber = "23",
+                    FlatNumber = "2",
+                    PostCode = "00-999",
+                    City = "Warszawa",
+                    PhoneNumber = "+48666666666",
+                    Postscript = "Komunikat",
+                    CustomId = "1234567890",
+                }
+            ),
+            Recipients.CreateRecipientInline(
+                new RecipientInline() {
+                    Name = "Andrzej Kowalski",
+                    Address = "ul. Przykładowa 45/321",
+                    PostCode = "34-001",
+                    City = "Kraków",
+                    PhoneNumber = "+48999888777",
+                    CustomId = "my-id-1113",
+                }
+            ),
+        }
+    ),
+    Documents = ShipmentDocuments.CreateDocuments(
+        Documents.CreateDocumentPdf(
+            new DocumentPdf() {
+                FileStream = "<document content encoded to base64>",
+                FileName = "document.pdf",
+            }
+        )
+    ),
+    Options = Options.CreateShipmentOptions(
+        new ShipmentOptions() {
+            PredefinedConfigId = 2670,
+        }
+    ),
+};
+
+var res = await sdk.Shipments.DispatchAsync(req);
+
+// handle response
+```
+### Example Usage: single
+
+<!-- UsageSnippet language="csharp" operationID="shipmentDispatch" method="post" path="/shipment" example="single" -->
 ```csharp
 using Postivo;
 using Postivo.Models.Components;
@@ -213,9 +342,124 @@ Check the price of a shipment for one or multiple recipients. Provide a `Shipmen
 
 The system accepts up to **50** recipients per call. For larger volumes, split the operation into multiple requests.
 
-### Example Usage
+### Example Usage: advanced_config
 
-<!-- UsageSnippet language="csharp" operationID="shipmentPrice" method="post" path="/shipment/price" -->
+<!-- UsageSnippet language="csharp" operationID="shipmentPrice" method="post" path="/shipment/price" example="advanced_config" -->
+```csharp
+using Postivo;
+using Postivo.Models.Components;
+
+var sdk = new Client(bearer: "<YOUR API ACCESS TOKEN>");
+
+Shipment req = new Shipment() {
+    Recipients = ShipmentRecipients.CreateRecipients(
+        Recipients.CreateRecipientInline(
+            new RecipientInline() {
+                Name = "Jan Nowak",
+                Name2 = "Firma testowa Sp. z o.o.",
+                Address = "ul. Testowa",
+                HomeNumber = "23",
+                FlatNumber = "2",
+                PostCode = "00-999",
+                City = "Warszawa",
+                PhoneNumber = "+48666666666",
+                Postscript = "Komunikat",
+                CustomId = "1234567890",
+            }
+        )
+    ),
+    Documents = ShipmentDocuments.CreateDocuments(
+        Documents.CreateDocumentPdf(
+            new DocumentPdf() {
+                FileStream = "<document content encoded to base64>",
+                FileName = "document.pdf",
+            }
+        )
+    ),
+    Options = Options.CreateShipmentOptions(
+        new ShipmentOptions() {
+            PredefinedConfigId = 2670,
+            InlineConfig = InlineConfigUnion.CreateInlineConfig(
+                new InlineConfig() {
+                    CarrierId = 4,
+                    ServiceId = 16,
+                    PaperId = 1,
+                    ColorPrint = true,
+                    DuplexPrint = false,
+                    EnvelopeId = 454,
+                    EnvelopeColorPrint = true,
+                }
+            ),
+            SenderId = 1,
+        }
+    ),
+};
+
+var res = await sdk.Shipments.PriceAsync(req);
+
+// handle response
+```
+### Example Usage: multi
+
+<!-- UsageSnippet language="csharp" operationID="shipmentPrice" method="post" path="/shipment/price" example="multi" -->
+```csharp
+using Postivo;
+using Postivo.Models.Components;
+using System.Collections.Generic;
+
+var sdk = new Client(bearer: "<YOUR API ACCESS TOKEN>");
+
+Shipment req = new Shipment() {
+    Recipients = ShipmentRecipients.CreateArrayOfRecipients(
+        new List<Recipients>() {
+            Recipients.CreateRecipientInline(
+                new RecipientInline() {
+                    Name = "Jan Nowak",
+                    Name2 = "Firma testowa Sp. z o.o.",
+                    Address = "ul. Testowa",
+                    HomeNumber = "23",
+                    FlatNumber = "2",
+                    PostCode = "00-999",
+                    City = "Warszawa",
+                    PhoneNumber = "+48666666666",
+                    Postscript = "Komunikat",
+                    CustomId = "1234567890",
+                }
+            ),
+            Recipients.CreateRecipientInline(
+                new RecipientInline() {
+                    Name = "Andrzej Kowalski",
+                    Address = "ul. Przykładowa 45/321",
+                    PostCode = "34-001",
+                    City = "Kraków",
+                    PhoneNumber = "+48999888777",
+                    CustomId = "my-id-1113",
+                }
+            ),
+        }
+    ),
+    Documents = ShipmentDocuments.CreateDocuments(
+        Documents.CreateDocumentPdf(
+            new DocumentPdf() {
+                FileStream = "<document content encoded to base64>",
+                FileName = "document.pdf",
+            }
+        )
+    ),
+    Options = Options.CreateShipmentOptions(
+        new ShipmentOptions() {
+            PredefinedConfigId = 2670,
+        }
+    ),
+};
+
+var res = await sdk.Shipments.PriceAsync(req);
+
+// handle response
+```
+### Example Usage: single
+
+<!-- UsageSnippet language="csharp" operationID="shipmentPrice" method="post" path="/shipment/price" example="single" -->
 ```csharp
 using Postivo;
 using Postivo.Models.Components;

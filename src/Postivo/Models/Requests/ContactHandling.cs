@@ -12,7 +12,7 @@ namespace Postivo.Models.Requests
     using Newtonsoft.Json;
     using Postivo.Utils;
     using System;
-    
+
     /// <summary>
     /// How to handle contacts that belong to the group.
     /// </summary>
@@ -62,5 +62,4 @@ namespace Postivo.Models.Requests
             throw new Exception($"Unknown value {value} for enum ContactHandling");
         }
     }
-
 }

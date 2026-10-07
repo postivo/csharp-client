@@ -25,49 +25,92 @@ namespace Postivo
 
     public interface IAccounts
     {
-
         /// <summary>
-        /// Retrieve account details
-        /// 
+        /// Retrieve account details.
+        /// </summary>
         /// <remarks>
         /// Retrieve the current account balance and other account details. You can also check the account limit and whether the account is a **main** account. Main accounts have unrestricted privileges and, via the <a href="https://panel.postivo.pl">User Panel</a>, you can create as many subaccounts as needed.
         /// </remarks>
-        /// </summary>
-        Task<GetAccountDetailsResponse> GetAsync(RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null);
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="GetAccountDetailsResponse"/> response envelope when completed.</returns>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Unauthorized. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public  Task<GetAccountDetailsResponse> GetAsync(
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        );
 
         /// <summary>
-        /// Get subaccount details
-        /// 
+        /// Get subaccount details.
+        /// </summary>
         /// <remarks>
         /// Check the account balance and other details, such as the subcredit balance of a subaccount. Subaccounts are additional users who can access your account’s services and data. You can restrict access levels and set privileges for subaccounts in the <a href="https://panel.postivo.pl">User Panel</a>.<br/>
         /// <br/>
         /// Provide the full subaccount login to access its data.
         /// </remarks>
-        /// </summary>
-        Task<GetSubaccountDetailsResponse> GetSubaccountAsync(string userLogin, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null);
+        /// <param name="userLogin">Login of the subaccount (user) for which to retrieve data.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="GetSubaccountDetailsResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="userLogin"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Unauthorized. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public  Task<GetSubaccountDetailsResponse> GetSubaccountAsync(
+            string userLogin,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        );
     }
 
     public class Accounts: IAccounts
     {
+        /// <summary>
+        /// SDK Configuration.
+        /// <see cref="SDKConfig"/>
+        /// </summary>
         public SDKConfig SDKConfiguration { get; private set; }
-        private const string _language = "csharp";
-        private const string _sdkVersion = "0.1.0";
-        private const string _sdkGenVersion = "2.728.0";
-        private const string _openapiDocVersion = "1.0.2";
 
         public Accounts(SDKConfig config)
         {
             SDKConfiguration = config;
         }
 
-        public async Task<GetAccountDetailsResponse> GetAsync(RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null)
+        /// <summary>
+        /// Retrieve account details.
+        /// </summary>
+        /// <remarks>
+        /// Retrieve the current account balance and other account details. You can also check the account limit and whether the account is a **main** account. Main accounts have unrestricted privileges and, via the <a href="https://panel.postivo.pl">User Panel</a>, you can create as many subaccounts as needed.
+        /// </remarks>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="GetAccountDetailsResponse"/> response envelope when completed.</returns>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Unauthorized. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public async  Task<GetAccountDetailsResponse> GetAsync(
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        )
         {
             string baseUrl = this.SDKConfiguration.GetTemplatedServerUrl();
-
             var urlString = baseUrl + "/account";
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, urlString);
             httpRequest.Headers.Add("user-agent", SDKConfiguration.UserAgent);
+
+            if (!httpRequest.Headers.Contains("Accept"))
+            {
+                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+            }
 
             if (SDKConfiguration.SecuritySource != null)
             {
@@ -117,7 +160,7 @@ namespace Postivo
                 httpResponse = await retries.Run();
                 int _statusCode = (int)httpResponse.StatusCode;
 
-                if (_statusCode == 401 || _statusCode == 403 || _statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
+                if (_statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
                 {
                     var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), httpResponse, null);
                     if (_httpResponse != null)
@@ -126,9 +169,9 @@ namespace Postivo
                     }
                 }
             }
-            catch (Exception error)
+            catch (Exception _hookError)
             {
-                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, error);
+                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, _hookError);
                 if (_httpResponse != null)
                 {
                     httpResponse = _httpResponse;
@@ -172,7 +215,7 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else if(responseStatusCode == 401 || responseStatusCode == 403 || responseStatusCode >= 400 && responseStatusCode < 500)
+            else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
                 {
@@ -255,17 +298,48 @@ namespace Postivo
             }
         }
 
-        public async Task<GetSubaccountDetailsResponse> GetSubaccountAsync(string userLogin, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null)
+
+        /// <summary>
+        /// Get subaccount details.
+        /// </summary>
+        /// <remarks>
+        /// Check the account balance and other details, such as the subcredit balance of a subaccount. Subaccounts are additional users who can access your account’s services and data. You can restrict access levels and set privileges for subaccounts in the <a href="https://panel.postivo.pl">User Panel</a>.<br/>
+        /// <br/>
+        /// Provide the full subaccount login to access its data.
+        /// </remarks>
+        /// <param name="userLogin">Login of the subaccount (user) for which to retrieve data.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="GetSubaccountDetailsResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="userLogin"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Unauthorized. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public async  Task<GetSubaccountDetailsResponse> GetSubaccountAsync(
+            string userLogin,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        )
         {
+            if (userLogin == null) throw new ArgumentNullException(nameof(userLogin));
+
             var request = new GetSubaccountDetailsRequest()
             {
                 UserLogin = userLogin,
             };
+
             string baseUrl = this.SDKConfiguration.GetTemplatedServerUrl();
-            var urlString = URLBuilder.Build(baseUrl, "/account/{user_login}", request);
+            var urlString = URLBuilder.Build(baseUrl, "/account/{user_login}", request, null);
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, urlString);
             httpRequest.Headers.Add("user-agent", SDKConfiguration.UserAgent);
+
+            if (!httpRequest.Headers.Contains("Accept"))
+            {
+                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+            }
 
             if (SDKConfiguration.SecuritySource != null)
             {
@@ -315,7 +389,7 @@ namespace Postivo
                 httpResponse = await retries.Run();
                 int _statusCode = (int)httpResponse.StatusCode;
 
-                if (_statusCode == 401 || _statusCode == 403 || _statusCode == 404 || _statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
+                if (_statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
                 {
                     var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), httpResponse, null);
                     if (_httpResponse != null)
@@ -324,9 +398,9 @@ namespace Postivo
                     }
                 }
             }
-            catch (Exception error)
+            catch (Exception _hookError)
             {
-                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, error);
+                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, _hookError);
                 if (_httpResponse != null)
                 {
                     httpResponse = _httpResponse;
@@ -370,7 +444,7 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else if(responseStatusCode == 401 || responseStatusCode == 403 || responseStatusCode == 404 || responseStatusCode >= 400 && responseStatusCode < 500)
+            else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
                 {
@@ -452,5 +526,6 @@ namespace Postivo
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
         }
+
     }
 }

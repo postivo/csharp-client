@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Ping response.
     /// </summary>
     public class PingResponse
     {
-
         /// <summary>
         /// API service status: OK (available), ERR (unavailable).
         /// </summary>

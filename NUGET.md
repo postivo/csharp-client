@@ -262,13 +262,12 @@ catch (System.Net.Http.HttpRequestException ex)
 * [`ClientException`](./src/Postivo/Models/Errors/ClientException.cs): The base class for HTTP error responses.
   * [`ErrorResponse`](./src/Postivo/Models/Errors/ErrorResponse.cs): Problem Details object (RFC 9457) describing the error.
 
-<details><summary>Less common exceptions (2)</summary>
+**Less common exceptions (2)**
 
 * [`System.Net.Http.HttpRequestException`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httprequestexception): Network connectivity error. For more details about the underlying cause, inspect the `ex.InnerException`.
 
 * Inheriting from [`ClientException`](./src/Postivo/Models/Errors/ClientException.cs):
   * [`ResponseValidationError`](./src/Postivo/Models/Errors/ResponseValidationError.cs): Thrown when the response data could not be deserialized into the expected type.
-</details>
 <!-- End Error Handling [errors] -->
 
 <!-- Start Server Selection [server] -->
@@ -290,7 +289,7 @@ using Postivo;
 using Postivo.Models.Components;
 
 var sdk = new Client(
-    server: SDKConfig.Server.Sandbox,
+    server: SDKConfig.Server.Prod,
     bearer: "<YOUR API ACCESS TOKEN>"
 );
 
@@ -381,8 +380,7 @@ var customHttpClient = new CustomHttpClient();
 var sdk = new Client(client: customHttpClient);
 ```
 
-<details>
-<summary>You can also provide a completely custom HTTP client with your own configuration:</summary>
+**You can also provide a completely custom HTTP client with your own configuration:**
 
 ```csharp
 using Postivo.Utils;
@@ -424,10 +422,8 @@ var sdk = Client.Builder()
     .WithClient(new AdvancedHttpClient())
     .Build();
 ```
-</details>
 
-<details>
-<summary>For simple debugging, you can enable request/response logging by implementing a custom client:</summary>
+**For simple debugging, you can enable request/response logging by implementing a custom client:**
 
 ```csharp
 public class LoggingHttpClient : ISpeakeasyHttpClient
@@ -457,7 +453,6 @@ public class LoggingHttpClient : ISpeakeasyHttpClient
 
 var sdk = new Client(client: new LoggingHttpClient());
 ```
-</details>
 
 The SDK also provides built-in hook support through the `SDKConfiguration.Hooks` system, which automatically handles
 `BeforeRequestAsync`, `AfterSuccessAsync`, and `AfterErrorAsync` hooks for advanced request lifecycle management.

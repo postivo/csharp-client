@@ -10,10 +10,9 @@
 namespace Postivo.Models.Components
 {
     using Postivo.Utils;
-    
+
     public class Security
     {
-
         [SpeakeasyMetadata("security:scheme=true,type=http,subType=bearer,name=Authorization")]
         public string? Bearer { get; set; }
     }

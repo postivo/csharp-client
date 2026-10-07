@@ -10,10 +10,9 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class GetContactByIdRequest
     {
-
         /// <summary>
         /// Global contact `id` to fetch.
         /// </summary>

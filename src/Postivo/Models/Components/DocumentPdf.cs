@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// PDF document payload.
     /// </summary>
     public class DocumentPdf
     {
-
         /// <summary>
         /// Base64-encoded PDF content.
         /// </summary>

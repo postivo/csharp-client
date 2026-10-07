@@ -119,5 +119,4 @@ namespace Postivo.Models.Errors
            #pragma warning restore CS0618
         }
     }
-
 }

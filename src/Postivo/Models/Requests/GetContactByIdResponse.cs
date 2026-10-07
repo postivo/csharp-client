@@ -12,10 +12,9 @@ namespace Postivo.Models.Requests
     using Newtonsoft.Json;
     using Postivo.Models.Components;
     using Postivo.Utils;
-    
+
     public class GetContactByIdResponse
     {
-
         [JsonProperty("-")]
         public HTTPMetadata HttpMeta { get; set; } = default!;
 

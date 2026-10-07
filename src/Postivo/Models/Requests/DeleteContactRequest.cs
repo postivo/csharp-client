@@ -10,10 +10,9 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class DeleteContactRequest
     {
-
         /// <summary>
         /// Global contact `id` to remove.
         /// </summary>

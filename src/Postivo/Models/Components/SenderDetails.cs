@@ -12,13 +12,12 @@ namespace Postivo.Models.Components
     using Newtonsoft.Json;
     using Postivo.Models.Components;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Extended sender details.
     /// </summary>
     public class SenderDetails
     {
-
         /// <summary>
         /// Unique sender ID.
         /// </summary>

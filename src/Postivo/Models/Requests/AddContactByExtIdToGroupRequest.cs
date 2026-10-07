@@ -10,10 +10,9 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class AddContactByExtIdToGroupRequest
     {
-
         /// <summary>
         /// External (custom) ID of the contact to add to the group.
         /// </summary>

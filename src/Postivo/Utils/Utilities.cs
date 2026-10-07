@@ -129,11 +129,29 @@ namespace Postivo.Utils
                 && o.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>));
         }
 
+        public static bool IsModelNamespace(string ns)
+        {
+            var modelNamespaces = new[]
+            {
+                "Postivo.Models.Requests",
+                "Postivo.Models.Components",
+                "Postivo.Models.Errors",
+            };
+
+            return modelNamespaces.Contains(ns);
+        }
+
+        public static bool IsOpenEnum(object? o) => o is IOpenEnum;
+
         public static bool IsClass(object? o)
         {
             if (o == null)
                 return false;
-            return o.GetType().IsClass && (o.GetType().FullName ?? "").StartsWith("Postivo.Models");
+            if (!o.GetType().IsClass)
+                return false;
+            if (IsOpenEnum(o))
+                return false;
+            return IsModelNamespace(o.GetType().Namespace ?? "");
         }
 
         // TODO: code review polyfilled for IsAssignableTo
@@ -202,7 +220,7 @@ namespace Postivo.Utils
                     ?.GetMethod("Value");
                 if (method == null)
                 {
-                    return Convert.ChangeType(value, Enum.GetUnderlyingType(value.GetType()))?.ToString() ?? "";
+                    return Convert.ChangeType(value, System.Enum.GetUnderlyingType(value.GetType()))?.ToString() ?? "";
                 }
                 return (string)(method.Invoke(null, new[] { value }) ?? "");
             }
@@ -221,7 +239,7 @@ namespace Postivo.Utils
                 return "";
             }
 
-            if (IsString(obj))
+            if (IsString(obj) || IsOpenEnum(obj))
             {
                 return obj.ToString() ?? "";
             }
@@ -301,6 +319,7 @@ namespace Postivo.Utils
 
             return $"Bearer {authHeaderValue}";
         }
+
         public static string RemoveSuffix(string inputString, string suffix)
         {
             if (!String.IsNullOrEmpty(suffix) && inputString.EndsWith(suffix))
@@ -309,6 +328,7 @@ namespace Postivo.Utils
             }
             return inputString;
         }
+
         public static string TemplateUrl(string template, Dictionary<string, string> paramDict)
         {
             foreach(KeyValuePair<string, string> entry in paramDict)
@@ -316,6 +336,20 @@ namespace Postivo.Utils
                 template = template.Replace('{' + entry.Key + '}', entry.Value);
             }
             return template;
+        }
+
+        public static Dictionary<string, List<string>> CollectHeaders(HttpHeaders headers)
+        {
+            var dict = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+            foreach (var header in headers)
+            {
+                if (!dict.ContainsKey(header.Key))
+                {
+                    dict[header.Key] = new List<string>();
+                }
+                dict[header.Key].AddRange(header.Value);
+            }
+            return dict;
         }
     }
 }

@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Contact group definition in the Address Book.
     /// </summary>
     public class Group
     {
-
         /// <summary>
         /// Group name.
         /// </summary>

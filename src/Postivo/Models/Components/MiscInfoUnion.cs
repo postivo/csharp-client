@@ -52,7 +52,6 @@ namespace Postivo.Models.Components
         }
     }
 
-
     [JsonConverter(typeof(MiscInfoUnion.MiscInfoUnionConverter))]
     public class MiscInfoUnion
     {
@@ -159,6 +158,10 @@ namespace Postivo.Models.Components
                     writer.WriteRawValue(Utilities.SerializeJSON(res.MiscInfo));
                     return;
                 }
+
+                throw new InvalidOperationException(
+                    "Could not serialize union to JSON: no variant value was set. " +
+                    "Construct this union using one of the Create* factory methods.");
             }
 
         }

@@ -11,10 +11,9 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     public class MetadataResponseService
     {
-
         /// <summary>
         /// Unique service (dispatch type) identifier.
         /// </summary>

@@ -12,15 +12,14 @@ namespace Postivo.Models.Requests
     using Newtonsoft.Json;
     using Postivo.Models.Components;
     using Postivo.Utils;
-    
+
     public class GetSubaccountDetailsResponse
     {
-
         [JsonProperty("-")]
         public HTTPMetadata HttpMeta { get; set; } = default!;
 
         /// <summary>
-        /// The request was processed successfully
+        /// The request was processed successfully.
         /// </summary>
         public AccountResponse? AccountResponse { get; set; }
 

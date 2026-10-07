@@ -42,6 +42,7 @@ namespace Postivo.Utils
             public bool Explode { get; set; } = false;
             public string Name { get; set; } = "";
             public string? Serialization { get; set; } = null;
+            public bool AllowReserved { get; set; } = false;
         }
 
         internal class QueryParamMetadata
@@ -50,6 +51,7 @@ namespace Postivo.Utils
             public bool Explode { get; set; } = true;
             public string Name { get; set; } = "";
             public string? Serialization { get; set; } = null;
+            public bool AllowReserved { get; set; } = false;
         }
 
         internal class HeaderMetadata
@@ -65,6 +67,7 @@ namespace Postivo.Utils
             public string? SubType { get; set; } = null;
             public bool Option { get; set; } = false;
             public bool Scheme { get; set; } = false;
+            public bool Composite { get; set; } = false;
             public string Name { get; set; } = "";
         }
 

@@ -2,6 +2,14 @@
 
 Type of document/certificate to generate.
 
+## Example Usage
+
+```csharp
+using Postivo.Models.Requests;
+
+var value = DocumentType.DispatchCert;
+```
+
 
 ## Values
 

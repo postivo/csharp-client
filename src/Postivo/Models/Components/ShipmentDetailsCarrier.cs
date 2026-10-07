@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Postal operator handling the shipment.
     /// </summary>
     public class ShipmentDetailsCarrier
     {
-
         /// <summary>
         /// Postal operator ID.
         /// </summary>

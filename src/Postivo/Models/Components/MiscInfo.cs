@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Additional shipment metadata. At least one of `order_name` or `mpk` must be provided.
     /// </summary>
     public class MiscInfo
     {
-
         /// <summary>
         /// MPK (“miejsce powstania kosztu”) — billing cost-center identifier to be included on invoices.
         /// </summary>

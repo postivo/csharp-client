@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Sender data for the shipment.
     /// </summary>
     public class Sender
     {
-
         /// <summary>
         /// Sender name (person or company) — line 1.
         /// </summary>
@@ -61,7 +60,7 @@ namespace Postivo.Models.Components
         public string? City { get; set; }
 
         /// <summary>
-        /// Country code in ISO 3166-1 alpha-2 format. Value is automatically uppercased. Full list: https://www.iso.org/iso-3166-country-codes.html
+        /// Country code in ISO 3166-1 alpha-2 format. Value is automatically uppercased. Full list: https://www.iso.org/iso-3166-country-codes.html.
         /// </summary>
         [JsonProperty("country")]
         public string? Country { get; set; } = null;

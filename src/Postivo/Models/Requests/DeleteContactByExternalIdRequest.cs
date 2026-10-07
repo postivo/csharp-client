@@ -10,10 +10,9 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class DeleteContactByExternalIdRequest
     {
-
         /// <summary>
         /// External (custom) ID of the contact to remove.
         /// </summary>

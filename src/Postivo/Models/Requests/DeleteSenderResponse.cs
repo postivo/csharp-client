@@ -13,10 +13,9 @@ namespace Postivo.Models.Requests
     using Postivo.Models.Components;
     using Postivo.Utils;
     using System.Collections.Generic;
-    
+
     public class DeleteSenderResponse
     {
-
         [JsonProperty("-")]
         public HTTPMetadata HttpMeta { get; set; } = default!;
 
@@ -25,6 +24,6 @@ namespace Postivo.Models.Requests
         /// </summary>
         public Models.Components.ErrorResponse? ErrorResponse { get; set; } = null;
 
-        public Dictionary<string, List<string>> Headers { get; set; } = default!;
+        public Dictionary<string, List<string>> Headers { get; set; } = new Dictionary<string, List<string>>();
     }
 }

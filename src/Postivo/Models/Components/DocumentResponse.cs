@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Generated document content.
     /// </summary>
     public class DocumentResponse
     {
-
         /// <summary>
         /// Document MIME type.
         /// </summary>

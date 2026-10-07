@@ -11,10 +11,9 @@ namespace Postivo.Models.Requests
 {
     using Postivo.Models.Requests;
     using Postivo.Utils;
-    
+
     public class GetDocumentsRequest
     {
-
         /// <summary>
         /// Single shipment ID assigned by the system when the shipment was created.
         /// </summary>

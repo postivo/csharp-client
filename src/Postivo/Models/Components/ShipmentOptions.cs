@@ -13,13 +13,12 @@ namespace Postivo.Models.Components
     using Postivo.Models.Components;
     using Postivo.Utils;
     using System;
-    
+
     /// <summary>
     /// Additional shipment settings.
     /// </summary>
     public class ShipmentOptions
     {
-
         /// <summary>
         /// ID of the shipment configuration profile stored in the user account.
         /// </summary>

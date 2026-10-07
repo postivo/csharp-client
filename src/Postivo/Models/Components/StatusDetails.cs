@@ -13,15 +13,14 @@ namespace Postivo.Models.Components
     using Postivo.Models.Components;
     using Postivo.Utils;
     using System.Collections.Generic;
-    
+
     /// <summary>
-    /// Details of a single shipment and its status events
+    /// Details of a single shipment and its status events.
     /// </summary>
     public class StatusDetails
     {
-
         /// <summary>
-        /// Single shipment details
+        /// Single shipment details.
         /// </summary>
         [JsonProperty("shipment_details")]
         public ShipmentDetails? ShipmentDetails { get; set; }

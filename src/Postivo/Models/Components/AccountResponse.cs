@@ -12,13 +12,12 @@ namespace Postivo.Models.Components
     using Newtonsoft.Json;
     using Postivo.Models.Components;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Account details, including balance and limits.
     /// </summary>
     public class AccountResponse
     {
-
         /// <summary>
         /// User login.
         /// </summary>

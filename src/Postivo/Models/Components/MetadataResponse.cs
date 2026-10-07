@@ -13,13 +13,12 @@ namespace Postivo.Models.Components
     using Postivo.Models.Components;
     using Postivo.Utils;
     using System.Collections.Generic;
-    
+
     /// <summary>
     /// Metadata response.
     /// </summary>
     public class MetadataResponse
     {
-
         /// <summary>
         /// List of carriers and their available services.
         /// </summary>

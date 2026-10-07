@@ -52,7 +52,6 @@ namespace Postivo.Models.Components
         }
     }
 
-
     /// <summary>
     /// Recipient data for a single shipment. For one recipient, provide a `RecipientInline`, `RecipientFromAddressBook`, or `RecipientFromAddressBookByExternalId` object. For multiple recipients, provide an array of these objects (1–50).
     /// </summary>
@@ -187,6 +186,10 @@ namespace Postivo.Models.Components
                     writer.WriteRawValue(Utilities.SerializeJSON(res.ArrayOfRecipients));
                     return;
                 }
+
+                throw new InvalidOperationException(
+                    "Could not serialize union to JSON: no variant value was set. " +
+                    "Construct this union using one of the Create* factory methods.");
             }
 
         }

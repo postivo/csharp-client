@@ -12,13 +12,12 @@ namespace Postivo.Models.Components
     using Newtonsoft.Json;
     using Postivo.Utils;
     using System;
-    
+
     /// <summary>
     /// Single shipment status event.
     /// </summary>
     public class StatusEvent
     {
-
         /// <summary>
         /// Unique status event ID.
         /// </summary>

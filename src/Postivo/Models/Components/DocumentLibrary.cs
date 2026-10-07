@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
-    /// A document from the user&apos;s account library.
+    /// A document from the user's account library.
     /// </summary>
     public class DocumentLibrary
     {
-
         /// <summary>
         /// ID of the document stored in the user’s document library.
         /// </summary>

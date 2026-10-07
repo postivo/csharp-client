@@ -25,79 +25,177 @@ namespace Postivo
 
     public interface IByExtId
     {
-
         /// <summary>
-        /// Retrieve contact details by EXT_ID
-        /// 
+        /// Retrieve contact details by EXT_ID.
+        /// </summary>
         /// <remarks>
         /// Get the details of a contact from your Address Book using your external (custom) ID (the value you defined when creating the contact).
         /// </remarks>
-        /// </summary>
-        Task<GetContactByExternalIdResponse> GetAsync(string extId, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null);
+        /// <param name="extId">External (custom) ID of the contact to fetch.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="GetContactByExternalIdResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="extId"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public  Task<GetContactByExternalIdResponse> GetAsync(
+            string extId,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        );
 
         /// <summary>
-        /// Update a contact by EXT_ID
-        /// 
+        /// Update a contact by EXT_ID.
+        /// </summary>
         /// <remarks>
         /// Update a contact by its external (custom) ID - the value you defined when creating the contact.
         /// </remarks>
-        /// </summary>
-        Task<UpdateContactByExternalIdResponse> UpdateAsync(string extId, Contact contact, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null);
+        /// <param name="extId">External (custom) ID of the contact to update.</param>
+        /// <param name="contact">A `Contact` object with the updated fields.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="UpdateContactByExternalIdResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">One of <paramref name="extId"/> or <paramref name="contact"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public  Task<UpdateContactByExternalIdResponse> UpdateAsync(
+            string extId,
+            Contact contact,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        );
 
         /// <summary>
-        /// Delete a contact by EXT_ID
-        /// 
+        /// Delete a contact by EXT_ID.
+        /// </summary>
         /// <remarks>
         /// Remove a contact from your account by its external (custom) ID - the value defined when the contact was created.
         /// </remarks>
-        /// </summary>
-        Task<DeleteContactByExternalIdResponse> DeleteAsync(string extId, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null);
+        /// <param name="extId">External (custom) ID of the contact to remove.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="DeleteContactByExternalIdResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="extId"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public  Task<DeleteContactByExternalIdResponse> DeleteAsync(
+            string extId,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        );
 
         /// <summary>
-        /// Remove a contact from a group by EXT_ID
-        /// 
+        /// Remove a contact from a group by EXT_ID.
+        /// </summary>
         /// <remarks>
         /// Remove a contact from a group in your Address Book using the contact’s external (custom) ID. This operation does not delete the contact; it only detaches the contact from the group. Provide the contact’s `ext_id` and the group’s `group_id` parameters to perform the detachment.
         /// </remarks>
-        /// </summary>
-        Task<RemoveContactByExtIdToGroupResponse> RemoveFromGroupAsync(string extId, long groupId, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null);
+        /// <param name="extId">External (custom) ID of the contact to detach from the group.</param>
+        /// <param name="groupId">Group `id` to detach from the contact.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="RemoveContactByExtIdToGroupResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="extId"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public  Task<RemoveContactByExtIdToGroupResponse> RemoveFromGroupAsync(
+            string extId,
+            long groupId,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        );
 
         /// <summary>
-        /// Add a contact to a group by EXT_ID
-        /// 
+        /// Add a contact to a group by EXT_ID.
+        /// </summary>
         /// <remarks>
         /// Assign a contact to a group using the contact’s external (custom) ID (assigned when creating the contact). If a contact and a group exist in your account, you can add the contact to that group.<br/>
         /// <br/>
         /// Provide the contact’s `ext_id` and the group’s `group_id` parameters to perform the assignment.
         /// </remarks>
-        /// </summary>
-        Task<AddContactByExtIdToGroupResponse> AddToGroupAsync(string extId, long groupId, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null);
+        /// <param name="extId">External (custom) ID of the contact to add to the group.</param>
+        /// <param name="groupId">Group `id` to associate with the contact.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="AddContactByExtIdToGroupResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="extId"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public  Task<AddContactByExtIdToGroupResponse> AddToGroupAsync(
+            string extId,
+            long groupId,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        );
     }
 
     public class ByExtId: IByExtId
     {
+        /// <summary>
+        /// SDK Configuration.
+        /// <see cref="SDKConfig"/>
+        /// </summary>
         public SDKConfig SDKConfiguration { get; private set; }
-        private const string _language = "csharp";
-        private const string _sdkVersion = "0.1.0";
-        private const string _sdkGenVersion = "2.728.0";
-        private const string _openapiDocVersion = "1.0.2";
 
         public ByExtId(SDKConfig config)
         {
             SDKConfiguration = config;
         }
 
-        public async Task<GetContactByExternalIdResponse> GetAsync(string extId, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null)
+        /// <summary>
+        /// Retrieve contact details by EXT_ID.
+        /// </summary>
+        /// <remarks>
+        /// Get the details of a contact from your Address Book using your external (custom) ID (the value you defined when creating the contact).
+        /// </remarks>
+        /// <param name="extId">External (custom) ID of the contact to fetch.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="GetContactByExternalIdResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="extId"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public async  Task<GetContactByExternalIdResponse> GetAsync(
+            string extId,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        )
         {
+            if (extId == null) throw new ArgumentNullException(nameof(extId));
+
             var request = new GetContactByExternalIdRequest()
             {
                 ExtId = extId,
             };
+
             string baseUrl = this.SDKConfiguration.GetTemplatedServerUrl();
-            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}", request);
+            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}", request, null);
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, urlString);
             httpRequest.Headers.Add("user-agent", SDKConfiguration.UserAgent);
+
+            if (!httpRequest.Headers.Contains("Accept"))
+            {
+                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+            }
 
             if (SDKConfiguration.SecuritySource != null)
             {
@@ -147,7 +245,7 @@ namespace Postivo
                 httpResponse = await retries.Run();
                 int _statusCode = (int)httpResponse.StatusCode;
 
-                if (_statusCode == 400 || _statusCode == 401 || _statusCode == 404 || _statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
+                if (_statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
                 {
                     var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), httpResponse, null);
                     if (_httpResponse != null)
@@ -156,9 +254,9 @@ namespace Postivo
                     }
                 }
             }
-            catch (Exception error)
+            catch (Exception _hookError)
             {
-                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, error);
+                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, _hookError);
                 if (_httpResponse != null)
                 {
                     httpResponse = _httpResponse;
@@ -202,7 +300,7 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else if(responseStatusCode == 400 || responseStatusCode == 401 || responseStatusCode == 404 || responseStatusCode >= 400 && responseStatusCode < 500)
+            else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
                 {
@@ -285,18 +383,50 @@ namespace Postivo
             }
         }
 
-        public async Task<UpdateContactByExternalIdResponse> UpdateAsync(string extId, Contact contact, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null)
+
+        /// <summary>
+        /// Update a contact by EXT_ID.
+        /// </summary>
+        /// <remarks>
+        /// Update a contact by its external (custom) ID - the value you defined when creating the contact.
+        /// </remarks>
+        /// <param name="extId">External (custom) ID of the contact to update.</param>
+        /// <param name="contact">A `Contact` object with the updated fields.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="UpdateContactByExternalIdResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">One of <paramref name="extId"/> or <paramref name="contact"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public async  Task<UpdateContactByExternalIdResponse> UpdateAsync(
+            string extId,
+            Contact contact,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        )
         {
+            if (extId == null) throw new ArgumentNullException(nameof(extId));
+            if (contact == null) throw new ArgumentNullException(nameof(contact));
+
             var request = new UpdateContactByExternalIdRequest()
             {
                 ExtId = extId,
                 Contact = contact,
             };
+
             string baseUrl = this.SDKConfiguration.GetTemplatedServerUrl();
-            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}", request);
+            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}", request, null);
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Put, urlString);
             httpRequest.Headers.Add("user-agent", SDKConfiguration.UserAgent);
+
+            if (!httpRequest.Headers.Contains("Accept"))
+            {
+                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+            }
 
             var serializedBody = RequestBodySerializer.Serialize(request, "Contact", "json", false, false);
             if (serializedBody != null)
@@ -352,7 +482,7 @@ namespace Postivo
                 httpResponse = await retries.Run();
                 int _statusCode = (int)httpResponse.StatusCode;
 
-                if (_statusCode == 400 || _statusCode == 401 || _statusCode == 403 || _statusCode == 404 || _statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
+                if (_statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
                 {
                     var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), httpResponse, null);
                     if (_httpResponse != null)
@@ -361,9 +491,9 @@ namespace Postivo
                     }
                 }
             }
-            catch (Exception error)
+            catch (Exception _hookError)
             {
-                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, error);
+                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, _hookError);
                 if (_httpResponse != null)
                 {
                     httpResponse = _httpResponse;
@@ -399,7 +529,8 @@ namespace Postivo
                         {
                             Response = httpResponse,
                             Request = httpRequest
-                        }
+                        },
+                        Headers = Utilities.CollectHeaders(httpResponse.Headers)
                     };
                     response.ContactResponse = obj;
                     return response;
@@ -407,7 +538,7 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else if(responseStatusCode == 400 || responseStatusCode == 401 || responseStatusCode == 403 || responseStatusCode == 404 || responseStatusCode >= 400 && responseStatusCode < 500)
+            else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
                 {
@@ -490,17 +621,46 @@ namespace Postivo
             }
         }
 
-        public async Task<DeleteContactByExternalIdResponse> DeleteAsync(string extId, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null)
+
+        /// <summary>
+        /// Delete a contact by EXT_ID.
+        /// </summary>
+        /// <remarks>
+        /// Remove a contact from your account by its external (custom) ID - the value defined when the contact was created.
+        /// </remarks>
+        /// <param name="extId">External (custom) ID of the contact to remove.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="DeleteContactByExternalIdResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="extId"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public async  Task<DeleteContactByExternalIdResponse> DeleteAsync(
+            string extId,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        )
         {
+            if (extId == null) throw new ArgumentNullException(nameof(extId));
+
             var request = new DeleteContactByExternalIdRequest()
             {
                 ExtId = extId,
             };
+
             string baseUrl = this.SDKConfiguration.GetTemplatedServerUrl();
-            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}", request);
+            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}", request, null);
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Delete, urlString);
             httpRequest.Headers.Add("user-agent", SDKConfiguration.UserAgent);
+
+            if (!httpRequest.Headers.Contains("Accept"))
+            {
+                httpRequest.Headers.Add("Accept", "application/problem+json");
+            }
 
             if (SDKConfiguration.SecuritySource != null)
             {
@@ -550,7 +710,7 @@ namespace Postivo
                 httpResponse = await retries.Run();
                 int _statusCode = (int)httpResponse.StatusCode;
 
-                if (_statusCode == 400 || _statusCode == 401 || _statusCode == 403 || _statusCode == 404 || _statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
+                if (_statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
                 {
                     var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), httpResponse, null);
                     if (_httpResponse != null)
@@ -559,9 +719,9 @@ namespace Postivo
                     }
                 }
             }
-            catch (Exception error)
+            catch (Exception _hookError)
             {
-                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, error);
+                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, _hookError);
                 if (_httpResponse != null)
                 {
                     httpResponse = _httpResponse;
@@ -584,10 +744,11 @@ namespace Postivo
                     {
                         Response = httpResponse,
                         Request = httpRequest
-                    }
+                    },
+                    Headers = Utilities.CollectHeaders(httpResponse.Headers)
                 };
             }
-            else if(responseStatusCode == 400 || responseStatusCode == 401 || responseStatusCode == 403 || responseStatusCode == 404 || responseStatusCode >= 400 && responseStatusCode < 500)
+            else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
                 {
@@ -670,18 +831,49 @@ namespace Postivo
             }
         }
 
-        public async Task<RemoveContactByExtIdToGroupResponse> RemoveFromGroupAsync(string extId, long groupId, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null)
+
+        /// <summary>
+        /// Remove a contact from a group by EXT_ID.
+        /// </summary>
+        /// <remarks>
+        /// Remove a contact from a group in your Address Book using the contact’s external (custom) ID. This operation does not delete the contact; it only detaches the contact from the group. Provide the contact’s `ext_id` and the group’s `group_id` parameters to perform the detachment.
+        /// </remarks>
+        /// <param name="extId">External (custom) ID of the contact to detach from the group.</param>
+        /// <param name="groupId">Group `id` to detach from the contact.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="RemoveContactByExtIdToGroupResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="extId"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public async  Task<RemoveContactByExtIdToGroupResponse> RemoveFromGroupAsync(
+            string extId,
+            long groupId,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        )
         {
+            if (extId == null) throw new ArgumentNullException(nameof(extId));
+
             var request = new RemoveContactByExtIdToGroupRequest()
             {
                 ExtId = extId,
                 GroupId = groupId,
             };
+
             string baseUrl = this.SDKConfiguration.GetTemplatedServerUrl();
-            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}/group/{group_id}", request);
+            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}/group/{group_id}", request, null);
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Delete, urlString);
             httpRequest.Headers.Add("user-agent", SDKConfiguration.UserAgent);
+
+            if (!httpRequest.Headers.Contains("Accept"))
+            {
+                httpRequest.Headers.Add("Accept", "application/problem+json");
+            }
 
             if (SDKConfiguration.SecuritySource != null)
             {
@@ -731,7 +923,7 @@ namespace Postivo
                 httpResponse = await retries.Run();
                 int _statusCode = (int)httpResponse.StatusCode;
 
-                if (_statusCode == 400 || _statusCode == 401 || _statusCode == 403 || _statusCode == 404 || _statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
+                if (_statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
                 {
                     var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), httpResponse, null);
                     if (_httpResponse != null)
@@ -740,9 +932,9 @@ namespace Postivo
                     }
                 }
             }
-            catch (Exception error)
+            catch (Exception _hookError)
             {
-                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, error);
+                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, _hookError);
                 if (_httpResponse != null)
                 {
                     httpResponse = _httpResponse;
@@ -765,7 +957,8 @@ namespace Postivo
                     {
                         Response = httpResponse,
                         Request = httpRequest
-                    }
+                    },
+                    Headers = Utilities.CollectHeaders(httpResponse.Headers)
                 };
             }
             else if(responseStatusCode == 404)
@@ -794,7 +987,7 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else if(responseStatusCode == 400 || responseStatusCode == 401 || responseStatusCode == 403 || responseStatusCode >= 400 && responseStatusCode < 500)
+            else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
                 {
@@ -877,18 +1070,51 @@ namespace Postivo
             }
         }
 
-        public async Task<AddContactByExtIdToGroupResponse> AddToGroupAsync(string extId, long groupId, RetryConfig? retryConfig = null, CancellationToken? cancellationToken = null)
+
+        /// <summary>
+        /// Add a contact to a group by EXT_ID.
+        /// </summary>
+        /// <remarks>
+        /// Assign a contact to a group using the contact’s external (custom) ID (assigned when creating the contact). If a contact and a group exist in your account, you can add the contact to that group.<br/>
+        /// <br/>
+        /// Provide the contact’s `ext_id` and the group’s `group_id` parameters to perform the assignment.
+        /// </remarks>
+        /// <param name="extId">External (custom) ID of the contact to add to the group.</param>
+        /// <param name="groupId">Group `id` to associate with the contact.</param>
+        /// <param name="retryConfig">The retry configuration to use for this operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
+        /// <returns>An awaitable task that returns a <see cref="AddContactByExtIdToGroupResponse"/> response envelope when completed.</returns>
+        /// <exception cref="ArgumentNullException">The required parameter <paramref name="extId"/> is null.</exception>
+        /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
+        /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
+        /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="APIException">Default API Exception.</exception>
+        public async  Task<AddContactByExtIdToGroupResponse> AddToGroupAsync(
+            string extId,
+            long groupId,
+            RetryConfig? retryConfig = null,
+            CancellationToken? cancellationToken = null
+        )
         {
+            if (extId == null) throw new ArgumentNullException(nameof(extId));
+
             var request = new AddContactByExtIdToGroupRequest()
             {
                 ExtId = extId,
                 GroupId = groupId,
             };
+
             string baseUrl = this.SDKConfiguration.GetTemplatedServerUrl();
-            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}/group/{group_id}", request);
+            var urlString = URLBuilder.Build(baseUrl, "/contacts/external/{ext_id}/group/{group_id}", request, null);
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Patch, urlString);
             httpRequest.Headers.Add("user-agent", SDKConfiguration.UserAgent);
+
+            if (!httpRequest.Headers.Contains("Accept"))
+            {
+                httpRequest.Headers.Add("Accept", "application/problem+json");
+            }
 
             if (SDKConfiguration.SecuritySource != null)
             {
@@ -938,7 +1164,7 @@ namespace Postivo
                 httpResponse = await retries.Run();
                 int _statusCode = (int)httpResponse.StatusCode;
 
-                if (_statusCode == 400 || _statusCode == 401 || _statusCode == 403 || _statusCode == 404 || _statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
+                if (_statusCode >= 400 && _statusCode < 500 || _statusCode >= 500 && _statusCode < 600)
                 {
                     var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), httpResponse, null);
                     if (_httpResponse != null)
@@ -947,9 +1173,9 @@ namespace Postivo
                     }
                 }
             }
-            catch (Exception error)
+            catch (Exception _hookError)
             {
-                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, error);
+                var _httpResponse = await this.SDKConfiguration.Hooks.AfterErrorAsync(new AfterErrorContext(hookCtx), null, _hookError);
                 if (_httpResponse != null)
                 {
                     httpResponse = _httpResponse;
@@ -972,7 +1198,8 @@ namespace Postivo
                     {
                         Response = httpResponse,
                         Request = httpRequest
-                    }
+                    },
+                    Headers = Utilities.CollectHeaders(httpResponse.Headers)
                 };
             }
             else if(responseStatusCode == 404)
@@ -1001,7 +1228,7 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else if(responseStatusCode == 400 || responseStatusCode == 401 || responseStatusCode == 403 || responseStatusCode >= 400 && responseStatusCode < 500)
+            else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
                 {
@@ -1083,5 +1310,6 @@ namespace Postivo
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
         }
+
     }
 }

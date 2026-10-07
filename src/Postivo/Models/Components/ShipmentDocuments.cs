@@ -52,7 +52,6 @@ namespace Postivo.Models.Components
         }
     }
 
-
     /// <summary>
     /// Document payload to print and enclose into shipment. For a single document, provide `DocumentPdf`, `DocumentLibrary`, or `DocumentMock` (for checking the price only). For multiple documents, provide an array of `DocumentPdf`, `DocumentLibrary`, or `DocumentMock` objects (1–20).
     /// </summary>
@@ -187,6 +186,10 @@ namespace Postivo.Models.Components
                     writer.WriteRawValue(Utilities.SerializeJSON(res.ArrayOfDocuments));
                     return;
                 }
+
+                throw new InvalidOperationException(
+                    "Could not serialize union to JSON: no variant value was set. " +
+                    "Construct this union using one of the Create* factory methods.");
             }
 
         }

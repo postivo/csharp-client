@@ -3,10 +3,10 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>Postivo</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.1</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>POSTIVO.PL</Authors>
-    <Copyright>Copyright (c) POSTIVO.PL 2025</Copyright>
+    <Copyright>Copyright (c) POSTIVO.PL 2026</Copyright>
     <PackageTags>sdk postivo hybrid mail post shipment</PackageTags>
   </PropertyGroup>
 

@@ -17,6 +17,9 @@ namespace Postivo
     using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// Main configuration for the SDK.
+    /// </summary>
     public struct SDKConfig
     {
         /// <summary>
@@ -52,7 +55,7 @@ namespace Postivo
             Client = client ?? new ClientHttpClient();
             ServerUrl = "";
             ServerName = null;
-            UserAgent = "speakeasy-sdk/csharp 0.1.0 2.728.0 1.0.2 Postivo";
+            UserAgent = "speakeasy-sdk/csharp 0.2.1 2.943.0 1.0.4 Postivo";
             SecuritySource = null;
             Hooks = new SDKHooks();
             RetryConfig = null;

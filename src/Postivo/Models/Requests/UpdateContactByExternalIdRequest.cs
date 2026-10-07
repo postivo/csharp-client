@@ -11,10 +11,9 @@ namespace Postivo.Models.Requests
 {
     using Postivo.Models.Components;
     using Postivo.Utils;
-    
+
     public class UpdateContactByExternalIdRequest
     {
-
         /// <summary>
         /// External (custom) ID of the contact to update.
         /// </summary>

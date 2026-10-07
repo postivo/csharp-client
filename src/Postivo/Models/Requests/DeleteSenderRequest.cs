@@ -10,10 +10,9 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class DeleteSenderRequest
     {
-
         /// <summary>
         /// Sender `id` to remove.
         /// </summary>

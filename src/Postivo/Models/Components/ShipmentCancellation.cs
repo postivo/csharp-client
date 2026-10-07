@@ -12,13 +12,12 @@ namespace Postivo.Models.Components
     using Newtonsoft.Json;
     using Postivo.Models.Components;
     using Postivo.Utils;
-    
+
     /// <summary>
-    /// Result of cancelling a single shipment
+    /// Result of cancelling a single shipment.
     /// </summary>
     public class ShipmentCancellation
     {
-
         /// <summary>
         /// Shipment ID.
         /// </summary>

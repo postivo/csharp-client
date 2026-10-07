@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Service (shipment type) used.
     /// </summary>
     public class ShipmentDetailsService
     {
-
         /// <summary>
         /// Service type ID (shipment/letter type).
         /// </summary>

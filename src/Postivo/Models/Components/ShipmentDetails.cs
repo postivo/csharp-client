@@ -13,13 +13,12 @@ namespace Postivo.Models.Components
     using Postivo.Models.Components;
     using Postivo.Utils;
     using System;
-    
+
     /// <summary>
-    /// Single shipment details
+    /// Single shipment details.
     /// </summary>
     public class ShipmentDetails
     {
-
         /// <summary>
         /// Unique shipment identifier.
         /// </summary>

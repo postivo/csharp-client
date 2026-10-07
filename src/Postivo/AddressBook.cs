@@ -17,17 +17,28 @@ namespace Postivo
     public interface IAddressBook
     {
         public IContacts Contacts { get; }
+
         public IGroups Groups { get; }
     }
 
     public class AddressBook: IAddressBook
     {
+        /// <summary>
+        /// SDK Configuration.
+        /// <see cref="SDKConfig"/>
+        /// </summary>
         public SDKConfig SDKConfiguration { get; private set; }
-        private const string _language = "csharp";
-        private const string _sdkVersion = "0.1.0";
-        private const string _sdkGenVersion = "2.728.0";
-        private const string _openapiDocVersion = "1.0.2";
+
+        /// <summary>
+        /// Contacts SubSDK.
+        /// <see cref="IContacts"/>
+        /// </summary>
         public IContacts Contacts { get; private set; }
+
+        /// <summary>
+        /// Groups SubSDK.
+        /// <see cref="IGroups"/>
+        /// </summary>
         public IGroups Groups { get; private set; }
 
         public AddressBook(SDKConfig config)

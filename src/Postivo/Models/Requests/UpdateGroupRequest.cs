@@ -11,10 +11,9 @@ namespace Postivo.Models.Requests
 {
     using Postivo.Models.Components;
     using Postivo.Utils;
-    
+
     public class UpdateGroupRequest
     {
-
         /// <summary>
         /// Group `id` to update.
         /// </summary>

@@ -10,12 +10,11 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class ListContactsRequest
     {
-
         /// <summary>
-        /// Page number of results
+        /// Page number of results.
         /// </summary>
         [SpeakeasyMetadata("queryParam:style=form,explode=true,name=page")]
         public long? Page { get; set; } = 1;

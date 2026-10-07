@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Address Book group details returned by the API.
     /// </summary>
     public class GroupResponse
     {
-
         /// <summary>
         /// Group name.
         /// </summary>

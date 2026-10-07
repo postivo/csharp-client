@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Problem Details object (RFC 9457) describing the error.
     /// </summary>
     public class ErrorResponse
     {
-
         /// <summary>
         /// URI that identifies the problem type.
         /// </summary>

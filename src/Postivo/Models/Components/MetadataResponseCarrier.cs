@@ -13,10 +13,9 @@ namespace Postivo.Models.Components
     using Postivo.Models.Components;
     using Postivo.Utils;
     using System.Collections.Generic;
-    
+
     public class MetadataResponseCarrier
     {
-
         /// <summary>
         /// Unique carrier identifier.
         /// </summary>

@@ -12,13 +12,12 @@ namespace Postivo.Models.Components
     using Newtonsoft.Json;
     using Postivo.Utils;
     using System;
-    
+
     /// <summary>
     /// Shipment processing status.
     /// </summary>
     public class ShipmentDetailsStatus
     {
-
         /// <summary>
         /// Indicates whether an error occurred during shipment processing.
         /// </summary>

@@ -11,10 +11,9 @@ namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
     using System.Collections.Generic;
-    
+
     public class CancelShipmentRequest
     {
-
         /// <summary>
         /// Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call.
         /// </summary>

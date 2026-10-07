@@ -13,10 +13,9 @@ namespace Postivo.Models.Components
     using Postivo.Models.Components;
     using Postivo.Utils;
     using System.Collections.Generic;
-    
+
     public class EnvelopeTemplate
     {
-
         /// <summary>
         /// Envelope template group name.
         /// </summary>

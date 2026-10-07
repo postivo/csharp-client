@@ -12,13 +12,12 @@ namespace Postivo.Models.Components
     using Newtonsoft.Json;
     using Postivo.Models.Components;
     using Postivo.Utils;
-    
+
     /// <summary>
-    /// Pricing details for a single shipment
+    /// Pricing details for a single shipment.
     /// </summary>
     public class ShipmentPrice
     {
-
         /// <summary>
         /// Recipient data for a shipment, including full postal address.
         /// </summary>

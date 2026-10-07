@@ -12,13 +12,12 @@ namespace Postivo.Models.Components
     using Newtonsoft.Json;
     using Postivo.Utils;
     using System.Collections.Generic;
-    
+
     /// <summary>
     /// Contact details returned by the API for an Address Book entry.
     /// </summary>
     public class ContactResponse
     {
-
         /// <summary>
         /// Name (person or company) — line 1.
         /// </summary>
@@ -62,7 +61,7 @@ namespace Postivo.Models.Components
         public string? City { get; set; }
 
         /// <summary>
-        /// Country code in ISO 3166-1 alpha-2 format. Default: &quot;PL&quot;. Value is automatically uppercased. Full list: https://www.iso.org/iso-3166-country-codes.html
+        /// Country code in ISO 3166-1 alpha-2 format. Default: "PL". Value is automatically uppercased. Full list: https://www.iso.org/iso-3166-country-codes.html.
         /// </summary>
         [JsonProperty("country")]
         public string? Country { get; set; } = "PL";

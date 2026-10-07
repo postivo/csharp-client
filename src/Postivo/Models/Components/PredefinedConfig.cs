@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Predefined configuration usable for dispatching shipments (referenced via `predefined_config_id`).
     /// </summary>
     public class PredefinedConfig
     {
-
         /// <summary>
         /// Unique predefined configuration ID.
         /// </summary>

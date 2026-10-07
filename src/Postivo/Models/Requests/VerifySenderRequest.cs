@@ -11,10 +11,9 @@ namespace Postivo.Models.Requests
 {
     using Postivo.Models.Requests;
     using Postivo.Utils;
-    
+
     public class VerifySenderRequest
     {
-
         /// <summary>
         /// ID of the sender to verify.
         /// </summary>

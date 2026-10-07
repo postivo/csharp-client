@@ -20,37 +20,59 @@ namespace Postivo
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-
     public interface IClient
     {
         public IAccounts Accounts { get; }
+
         public IAddressBook AddressBook { get; }
+
         public IShipments Shipments { get; }
+
         public IMetadata Metadata { get; }
 
         /// <summary>
-        /// Common
+        /// Common.
         /// </summary>
         public ICommon Common { get; }
+
         public ISenders Senders { get; }
     }
 
-
     public class Client: IClient
     {
+        /// <summary>
+        /// The main SDK Configuration.
+        /// </summary>
         public SDKConfig SDKConfiguration { get; private set; }
-
-        private const string _language = "csharp";
-        private const string _sdkVersion = "0.1.0";
-        private const string _sdkGenVersion = "2.728.0";
-        private const string _openapiDocVersion = "1.0.2";
+        /// <summary>
+        /// The Accounts sub-SDK.
+        /// </summary>
         public IAccounts Accounts { get; private set; }
+        /// <summary>
+        /// The AddressBook sub-SDK.
+        /// </summary>
         public IAddressBook AddressBook { get; private set; }
+        /// <summary>
+        /// The Shipments sub-SDK.
+        /// </summary>
         public IShipments Shipments { get; private set; }
+        /// <summary>
+        /// The Metadata sub-SDK.
+        /// </summary>
         public IMetadata Metadata { get; private set; }
+        /// <summary>
+        /// The Common sub-SDK.
+        /// </summary>
         public ICommon Common { get; private set; }
+        /// <summary>
+        /// The Senders sub-SDK.
+        /// </summary>
         public ISenders Senders { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the SDK based on a <see cref="SDKConfig"/> configuration object.
+        /// </summary>
+        /// <param name="config">The SDK configuration object.</param>
         public Client(SDKConfig config)
         {
             SDKConfiguration = config;
@@ -79,7 +101,15 @@ namespace Postivo
         /// <param name="urlParams">A dictionary of parameters to use for templating the serverUrl. Only used when serverUrl is provided.</param>
         /// <param name="client">A custom HTTP client implementation to use for making API requests. If not provided, the default ClientHttpClient will be used.</param>
         /// <param name="retryConfig">Configuration for retry behavior when API requests fail. Defines retry strategies, backoff policies, and maximum retry attempts.</param>
-        public Client(string? bearer = null, Func<string>? bearerSource = null, SDKConfig.Server? server = null, string? serverUrl = null, Dictionary<string, string>? urlParams = null, IClientHttpClient? client = null, RetryConfig? retryConfig = null)
+        public Client(
+            string? bearer = null,
+            Func<string>? bearerSource = null,
+            SDKConfig.Server? server = null,
+            string? serverUrl = null,
+            Dictionary<string, string>? urlParams = null,
+            IClientHttpClient? client = null,
+            RetryConfig? retryConfig = null
+        )
         {
 
             if (serverUrl != null)
@@ -128,18 +158,27 @@ namespace Postivo
             SDKConfiguration = SDKConfiguration.Hooks.SDKInit(SDKConfiguration);
         }
 
+        /// <summary>
+        /// Builder class for constructing an instance of the SDK.
+        /// </summary>
         public class SDKBuilder
         {
             private SDKConfig _sdkConfig = new SDKConfig(client: new ClientHttpClient());
 
             public SDKBuilder() { }
 
+            /// <summary>
+            /// Overrides the default server by name.
+            /// </summary>
             public SDKBuilder WithServer(SDKConfig.Server server)
             {
                 _sdkConfig.ServerName = server;
                 return this;
             }
 
+            /// <summary>
+            /// Overrides the default server URL for the SDK.
+            /// </summary>
             public SDKBuilder WithServerUrl(string serverUrl, Dictionary<string, string>? serverVariables = null)
             {
                 if (serverVariables != null)
@@ -150,30 +189,45 @@ namespace Postivo
                 return this;
             }
 
+            /// <summary>
+            /// Sets the bearerSource security parameter for the SDK.
+            /// </summary>
             public SDKBuilder WithBearerSource(Func<string> bearerSource)
             {
                 _sdkConfig.SecuritySource = () => new Postivo.Models.Components.Security() { Bearer = bearerSource() };
                 return this;
             }
 
+            /// <summary>
+            /// Sets the bearer security parameter for the SDK.
+            /// </summary>
             public SDKBuilder WithBearer(string bearer)
             {
                 _sdkConfig.SecuritySource = () => new Postivo.Models.Components.Security() { Bearer = bearer };
                 return this;
             }
 
+            /// <summary>
+            /// Sets a custom HTTP client to be used by the SDK.
+            /// </summary>
             public SDKBuilder WithClient(IClientHttpClient client)
             {
                 _sdkConfig.Client = client;
                 return this;
             }
 
+            /// <summary>
+            /// Sets the retry configuration for the SDK.
+            /// </summary>
             public SDKBuilder WithRetryConfig(RetryConfig retryConfig)
             {
                 _sdkConfig.RetryConfig = retryConfig;
                 return this;
             }
 
+            /// <summary>
+            /// Builds and returns the SDK instance.
+            /// </summary>
             public Client Build()
             {
               return new Client(_sdkConfig);

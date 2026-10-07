@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Select recipient data for a shipment from the Address Book.
     /// </summary>
     public class RecipientFromAddressBook
     {
-
         /// <summary>
         /// Global ID of the recipient stored in the personal Address Book.
         /// </summary>

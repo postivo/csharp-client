@@ -12,29 +12,29 @@ namespace Postivo.Models.Requests
     using Newtonsoft.Json;
     using Postivo.Utils;
     using System;
-    
+
     /// <summary>
     /// Type of document/certificate to generate.
     /// </summary>
     public enum DocumentType
     {
         /// <summary>
-        /// Dispatch confirmation certificate
+        /// Dispatch confirmation certificate.
         /// </summary>
         [JsonProperty("dispatch_cert")]
         DispatchCert,
         /// <summary>
-        /// Envelope template preview
+        /// Envelope template preview.
         /// </summary>
         [JsonProperty("envelope")]
         Envelope,
         /// <summary>
-        /// EPO certificate in PDF format (Elektroniczne Potwierdzenie Odbioru)
+        /// EPO certificate in PDF format (Elektroniczne Potwierdzenie Odbioru).
         /// </summary>
         [JsonProperty("epo_pdf")]
         EpoPdf,
         /// <summary>
-        /// EPO certificate in XML format (Elektroniczne Potwierdzenie Odbioru)
+        /// EPO certificate in XML format (Elektroniczne Potwierdzenie Odbioru).
         /// </summary>
         [JsonProperty("epo_xml")]
         EpoXml,
@@ -72,5 +72,4 @@ namespace Postivo.Models.Requests
             throw new Exception($"Unknown value {value} for enum DocumentType");
         }
     }
-
 }

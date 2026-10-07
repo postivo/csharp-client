@@ -10,10 +10,9 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class RemoveContactByExtIdToGroupRequest
     {
-
         /// <summary>
         /// External (custom) ID of the contact to detach from the group.
         /// </summary>

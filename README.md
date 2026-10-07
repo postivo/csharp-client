@@ -203,7 +203,7 @@ var res = await sdk.Accounts.GetAsync();
 * [Get](docs/sdks/accounts/README.md#get) - Retrieve account details
 * [GetSubaccount](docs/sdks/accounts/README.md#getsubaccount) - Get subaccount details
 
-#### [AddressBook.Contacts](docs/sdks/contacts/README.md)
+### [AddressBook.Contacts](docs/sdks/contacts/README.md)
 
 * [List](docs/sdks/contacts/README.md#list) - List contacts
 * [Add](docs/sdks/contacts/README.md#add) - Add a new contact
@@ -221,7 +221,7 @@ var res = await sdk.Accounts.GetAsync();
 * [RemoveFromGroup](docs/sdks/byextid/README.md#removefromgroup) - Remove a contact from a group by EXT_ID
 * [AddToGroup](docs/sdks/byextid/README.md#addtogroup) - Add a contact to a group by EXT_ID
 
-#### [AddressBook.Groups](docs/sdks/groups/README.md)
+### [AddressBook.Groups](docs/sdks/groups/README.md)
 
 * [List](docs/sdks/groups/README.md#list) - List groups
 * [Add](docs/sdks/groups/README.md#add) - Add a new group
@@ -405,7 +405,7 @@ using Postivo;
 using Postivo.Models.Components;
 
 var sdk = new Client(
-    server: SDKConfig.Server.Sandbox,
+    server: SDKConfig.Server.Prod,
     bearer: "<YOUR API ACCESS TOKEN>"
 );
 

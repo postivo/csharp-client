@@ -10,10 +10,9 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class GetSubaccountDetailsRequest
     {
-
         /// <summary>
         /// Login of the subaccount (user) for which to retrieve data.
         /// </summary>

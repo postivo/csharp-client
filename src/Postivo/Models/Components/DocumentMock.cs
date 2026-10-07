@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Mock document used to simulate page count for pricing without uploading a real file.
     /// </summary>
     public class DocumentMock
     {
-
         /// <summary>
         /// Number of pages in the mock document.
         /// </summary>

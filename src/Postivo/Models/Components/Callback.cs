@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Per-shipment callback configuration. When set, overrides the global callback defined in the user account.
     /// </summary>
     public class Callback
     {
-
         /// <summary>
         /// Callback target URL.
         /// </summary>

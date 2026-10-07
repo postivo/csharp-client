@@ -11,13 +11,12 @@ namespace Postivo.Models.Requests
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Verification code received in the letter.
     /// </summary>
     public class VerifySenderRequestBody
     {
-
         [JsonProperty("verification_code")]
         public string VerificationCode { get; set; } = default!;
     }

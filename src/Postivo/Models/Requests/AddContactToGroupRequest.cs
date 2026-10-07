@@ -10,10 +10,9 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class AddContactToGroupRequest
     {
-
         /// <summary>
         /// Global contact `id` to add to the group.
         /// </summary>

@@ -11,13 +11,12 @@ namespace Postivo.Models.Components
 {
     using Newtonsoft.Json;
     using Postivo.Utils;
-    
+
     /// <summary>
     /// Shipment configuration parameters. Overrides settings loaded from `predefined_config_id`.
     /// </summary>
     public class InlineConfig
     {
-
         /// <summary>
         /// Preferred carrier identifier.
         /// </summary>

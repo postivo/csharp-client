@@ -12,19 +12,19 @@ namespace Postivo.Models.Components
     using Newtonsoft.Json;
     using Postivo.Utils;
     using System;
-    
+
     /// <summary>
     /// Account type.
     /// </summary>
     public enum AccountType
     {
         /// <summary>
-        /// Account type PRE-PAID
+        /// Account type PRE-PAID.
         /// </summary>
         [JsonProperty("PRE-PAID")]
         PrePaid,
         /// <summary>
-        /// Account type POST-PAID
+        /// Account type POST-PAID.
         /// </summary>
         [JsonProperty("POST-PAID")]
         PostPaid,
@@ -62,5 +62,4 @@ namespace Postivo.Models.Components
             throw new Exception($"Unknown value {value} for enum AccountType");
         }
     }
-
 }

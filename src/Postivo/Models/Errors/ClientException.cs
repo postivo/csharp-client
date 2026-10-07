@@ -14,6 +14,9 @@ namespace Postivo.Models.Errors
     using System.Net.Http;
     using System.Net.Http.Headers;
 
+    /// <summary>
+    /// Base Exception for API Errors.
+    /// </summary>
     public class ClientException : Exception
     {
         /// <summary>

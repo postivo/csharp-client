@@ -11,10 +11,9 @@ namespace Postivo.Models.Requests
 {
     using Postivo.Models.Requests;
     using Postivo.Utils;
-    
+
     public class DeleteGroupRequest
     {
-
         /// <summary>
         /// Group `id` to remove.
         /// </summary>

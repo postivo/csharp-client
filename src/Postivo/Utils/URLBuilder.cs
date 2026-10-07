@@ -14,10 +14,11 @@ namespace Postivo.Utils
     using System.Collections.Generic;
     using System.Net;
     using System.Reflection;
+    using System.Text;
 
     internal static class URLBuilder
     {
-        public static string Build(string baseUrl, string relativeUrl, object? request)
+        public static string Build(string baseUrl, string relativeUrl, object? request, List<string>? allowEmptyValue = null)
         {
             var url = baseUrl;
 
@@ -34,10 +35,11 @@ namespace Postivo.Utils
 
             url += pathAndFragment[0];
 
-            var parameters = GetPathParameters(request);
-            url = ReplaceParameters(url, parameters);
+            var parameters = GetPathParameters(request, out var allowReservedPathNames);
+            url = ReplaceParameters(url, parameters, allowReservedPathNames);
 
-            var queryParams = SerializeQueryParams(TrySerializeQueryParams(request));
+            var serializedQuery = TrySerializeQueryParams(request, allowEmptyValue, out var allowReservedQueryPositions);
+            var queryParams = SerializeQueryParams(serializedQuery, allowReservedQueryPositions);
             if (queryParams != "")
             {
                 url += $"?{queryParams}";
@@ -51,33 +53,95 @@ namespace Postivo.Utils
             return url;
         }
 
-        public static string ReplaceParameters(string url, Dictionary<string, string> parameters)
+        public static string ReplaceParameters(string url, Dictionary<string, string> parameters, HashSet<string>? allowReservedNames = null)
         {
             foreach (var key in parameters.Keys)
             {
-                url = url.Replace($"{{{key}}}", Uri.EscapeDataString(parameters[key]));
+                var escaped = allowReservedNames != null && allowReservedNames.Contains(key)
+                    ? EscapeExceptReserved(parameters[key])
+                    : Uri.EscapeDataString(parameters[key]);
+                url = url.Replace($"{{{key}}}", escaped);
             }
 
             return url;
         }
 
-        public static string SerializeQueryParams(Dictionary<string, List<string>> queryParams) {
+        public static string SerializeQueryParams(Dictionary<string, List<string>> queryParams, Dictionary<string, HashSet<int>>? allowReservedPositions = null)
+        {
             var queries = new List<string>();
 
             foreach (var key in queryParams.Keys)
             {
-                foreach (var value in queryParams[key])
+                var values = queryParams[key];
+                HashSet<int>? reservedPositions = null;
+                allowReservedPositions?.TryGetValue(key, out reservedPositions);
+
+                for (var i = 0; i < values.Count; i++)
                 {
-                    queries.Add($"{key}={WebUtility.UrlEncode(Utilities.ToString(value))}");
+                    var stringValue = Utilities.ToString(values[i]);
+                    var encoded = reservedPositions != null && reservedPositions.Contains(i)
+                        ? EscapeExceptReserved(stringValue)
+                        : WebUtility.UrlEncode(stringValue);
+                    queries.Add($"{key}={encoded}");
                 }
             }
 
             return string.Join("&", queries);
         }
 
-        private static Dictionary<string, string> GetPathParameters(object? request)
+        private static void AddQueryValues(Dictionary<string, List<string>> parameters, string key, IEnumerable<string> values, bool allowReserved, Dictionary<string, HashSet<int>> allowReservedPositions)
+        {
+            if (!parameters.TryGetValue(key, out var existing))
+            {
+                existing = new List<string>();
+                parameters[key] = existing;
+            }
+
+            var start = existing.Count;
+            existing.AddRange(values);
+
+            if (!allowReserved)
+            {
+                return;
+            }
+
+            if (!allowReservedPositions.TryGetValue(key, out var positions))
+            {
+                positions = new HashSet<int>();
+                allowReservedPositions[key] = positions;
+            }
+
+            for (var i = start; i < existing.Count; i++)
+            {
+                positions.Add(i);
+            }
+        }
+
+        internal static string EscapeExceptReserved(string value)
+        {
+            const string reservedChars = ":/?#[]@!$&'()*+,;=";
+            var sb = new StringBuilder(value.Length);
+            foreach (var b in Encoding.UTF8.GetBytes(value))
+            {
+                var isUnreserved =
+                    (b >= 'A' && b <= 'Z') || (b >= 'a' && b <= 'z') || (b >= '0' && b <= '9')
+                    || b == '-' || b == '.' || b == '_' || b == '~';
+                if (isUnreserved || reservedChars.IndexOf((char)b) >= 0)
+                {
+                    sb.Append((char)b);
+                }
+                else
+                {
+                    sb.Append('%').Append(b.ToString("X2"));
+                }
+            }
+            return sb.ToString();
+        }
+
+        private static Dictionary<string, string> GetPathParameters(object? request, out HashSet<string> allowReservedNames)
         {
             var parameters = new Dictionary<string, string>();
+            allowReservedNames = new HashSet<string>();
 
             if (request == null)
             {
@@ -90,10 +154,6 @@ namespace Postivo.Utils
             {
                 var val = prop.GetValue(request);
 
-                if (val == null)
-                {
-                    continue;
-                }
 
                 if (prop.GetCustomAttribute<SpeakeasyMetadata>()?.GetRequestMetadata() != null)
                 {
@@ -104,6 +164,18 @@ namespace Postivo.Utils
 
                 if (metadata == null)
                 {
+                    continue;
+                }
+
+                if (metadata.AllowReserved)
+                {
+                    allowReservedNames.Add(metadata.Name ?? prop.Name);
+                }
+
+                // Handle null values and empty arrays as empty query parameters
+                if (val == null || (Utilities.IsList(val) && ((IList)val).Count == 0))
+                {
+                    parameters.Add(metadata.Name ?? prop.Name, "");
                     continue;
                 }
 
@@ -147,9 +219,10 @@ namespace Postivo.Utils
             return parameters;
         }
 
-        private static Dictionary<string, List<string>> TrySerializeQueryParams(object? request)
+        private static Dictionary<string, List<string>> TrySerializeQueryParams(object? request, List<string>? allowEmptyValue, out Dictionary<string, HashSet<int>> allowReservedPositions)
         {
             var parameters = new Dictionary<string, List<string>>();
+            allowReservedPositions = new Dictionary<string, HashSet<int>>();
 
             if (request == null)
             {
@@ -161,9 +234,20 @@ namespace Postivo.Utils
             foreach (var prop in props)
             {
                 var val = prop.GetValue(request);
-
+                var metadata = prop.GetCustomAttribute<SpeakeasyMetadata>()?.GetQueryParamMetadata();
+                
                 if (val == null)
                 {
+                    // If this parameter is in allowEmptyValue and val is null, include it as empty
+                    if (metadata != null && allowEmptyValue?.Contains(metadata.Name ?? prop.Name) == true)
+                    {
+                        var paramName = metadata.Name ?? prop.Name;
+                        if (!parameters.ContainsKey(paramName))
+                        {
+                            parameters.Add(paramName, new List<string>());
+                        }
+                        parameters[paramName].Add("");
+                    }
                     continue;
                 }
 
@@ -172,7 +256,6 @@ namespace Postivo.Utils
                     continue;
                 }
 
-                var metadata = prop.GetCustomAttribute<SpeakeasyMetadata>()?.GetQueryParamMetadata();
                 if (metadata == null)
                 {
                     continue;
@@ -183,13 +266,12 @@ namespace Postivo.Utils
                     switch (metadata.Serialization)
                     {
                         case "json":
-                            if (!parameters.ContainsKey(metadata.Name ?? prop.Name))
-                            {
-                                parameters.Add(metadata.Name ?? prop.Name, new List<string>());
-                            }
-
-                            parameters[metadata.Name ?? prop.Name].Add(
-                                Utilities.SerializeJSON(val)
+                            AddQueryValues(
+                                parameters,
+                                metadata.Name ?? prop.Name,
+                                new[] { Utilities.SerializeJSON(val) },
+                                metadata.AllowReserved,
+                                allowReservedPositions
                             );
                             break;
                         default:
@@ -207,19 +289,12 @@ namespace Postivo.Utils
                                 metadata.Name ?? prop.Name,
                                 val,
                                 metadata.Explode,
-                                ","
+                                ",",
+                                allowEmptyValue
                             );
                             foreach (var key in formParams.Keys)
                             {
-                                if (!parameters.ContainsKey(key))
-                                {
-                                    parameters.Add(key, new List<string>());
-                                }
-
-                                foreach (var v in formParams[key])
-                                {
-                                    parameters[key].Add(v);
-                                }
+                                AddQueryValues(parameters, key, formParams[key], metadata.AllowReserved, allowReservedPositions);
                             }
                             break;
                         case "deepObject":
@@ -229,15 +304,7 @@ namespace Postivo.Utils
                             );
                             foreach (var key in deepObjParams.Keys)
                             {
-                                if (!parameters.ContainsKey(key))
-                                {
-                                    parameters.Add(key, new List<string>());
-                                }
-
-                                foreach (var v in deepObjParams[key])
-                                {
-                                    parameters[key].Add(v);
-                                }
+                                AddQueryValues(parameters, key, deepObjParams[key], metadata.AllowReserved, allowReservedPositions);
                             }
                             break;
                         case "pipeDelimited":
@@ -245,19 +312,12 @@ namespace Postivo.Utils
                                 metadata.Name ?? prop.Name,
                                 val,
                                 metadata.Explode,
-                                "|"
+                                "|",
+                                allowEmptyValue
                             );
                             foreach (var key in pipeParams.Keys)
                             {
-                                if (!parameters.ContainsKey(key))
-                                {
-                                    parameters.Add(key, new List<string>());
-                                }
-
-                                foreach (var v in pipeParams[key])
-                                {
-                                    parameters[key].Add(v);
-                                }
+                                AddQueryValues(parameters, key, pipeParams[key], metadata.AllowReserved, allowReservedPositions);
                             }
                             break;
                         default:
@@ -358,7 +418,8 @@ namespace Postivo.Utils
             string parentName,
             object value,
             bool explode,
-            string delimiter
+            string delimiter,
+            List<string>? allowEmptyValue = null
         )
         {
             var parameters = new Dictionary<string, List<string>>();
@@ -458,32 +519,45 @@ namespace Postivo.Utils
             {
                 var values = new List<string>();
                 var items = new List<string>();
+                var list = (IList)value;
 
-                foreach (var item in (IList)value)
-                {
-                    if (explode)
-                    {
-                        values.Add(Utilities.ValueToString(item));
-                    }
-                    else
-                    {
-                        items.Add(Utilities.ValueToString(item));
-                    }
-                }
-
-                if (items.Count > 0)
-                {
-                    values.Add(string.Join(delimiter, items));
-                }
-
-                foreach (var val in values)
+                // Handle empty arrays - add empty parameter if allowEmptyValue includes this parameter
+                if (list.Count == 0 && allowEmptyValue?.Contains(parentName) == true)
                 {
                     if (!parameters.ContainsKey(parentName))
                     {
                         parameters.Add(parentName, new List<string>());
                     }
+                    parameters[parentName].Add("");
+                }
+                else
+                {
+                    foreach (var item in list)
+                    {
+                        if (explode)
+                        {
+                            values.Add(Utilities.ValueToString(item));
+                        }
+                        else
+                        {
+                            items.Add(Utilities.ValueToString(item));
+                        }
+                    }
 
-                    parameters[parentName].Add(val);
+                    if (items.Count > 0)
+                    {
+                        values.Add(string.Join(delimiter, items));
+                    }
+
+                    foreach (var val in values)
+                    {
+                        if (!parameters.ContainsKey(parentName))
+                        {
+                            parameters.Add(parentName, new List<string>());
+                        }
+
+                        parameters[parentName].Add(val);
+                    }
                 }
             }
             else
@@ -493,7 +567,16 @@ namespace Postivo.Utils
                     parameters.Add(parentName, new List<string>());
                 }
 
-                parameters[parentName].Add(Utilities.ValueToString(value));
+                // Handle null values and empty strings for allowEmptyValue parameters
+                var stringValue = Utilities.ValueToString(value);
+                if ((value == null || stringValue == "") && allowEmptyValue?.Contains(parentName) == true)
+                {
+                    parameters[parentName].Add("");
+                }
+                else
+                {
+                    parameters[parentName].Add(stringValue);
+                }
             }
 
             return parameters;

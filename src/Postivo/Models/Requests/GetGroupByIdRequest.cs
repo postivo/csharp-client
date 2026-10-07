@@ -10,12 +10,11 @@
 namespace Postivo.Models.Requests
 {
     using Postivo.Utils;
-    
+
     public class GetGroupByIdRequest
     {
-
         /// <summary>
-        /// Group id to fetch
+        /// Group id to fetch.
         /// </summary>
         [SpeakeasyMetadata("pathParam:style=simple,explode=false,name=id")]
         public long Id { get; set; } = default!;
