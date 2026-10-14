@@ -15,7 +15,7 @@ namespace Postivo.Models.Requests
     public class GetStatusRequest
     {
         /// <summary>
-        /// Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call.
+        /// Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call. Empty items, including leading, trailing or repeated commas, are rejected with HTTP 400. Surrounding whitespace is ignored and duplicate IDs are processed once.
         /// </summary>
         [SpeakeasyMetadata("pathParam:style=simple,explode=true,name=ids")]
         public List<string> Ids { get; set; } = default!;

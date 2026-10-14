@@ -19,11 +19,6 @@ namespace Postivo.Models.Requests
         [JsonProperty("-")]
         public HTTPMetadata HttpMeta { get; set; } = default!;
 
-        /// <summary>
-        /// Invalid request.
-        /// </summary>
-        public Models.Components.ErrorResponse? ErrorResponse { get; set; } = null;
-
         public Dictionary<string, List<string>> Headers { get; set; } = new Dictionary<string, List<string>>();
     }
 }

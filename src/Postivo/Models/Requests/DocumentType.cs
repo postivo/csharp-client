@@ -29,7 +29,7 @@ namespace Postivo.Models.Requests
         [JsonProperty("envelope")]
         Envelope,
         /// <summary>
-        /// EPO certificate in PDF format (Elektroniczne Potwierdzenie Odbioru).
+        /// EPO certificate visualization in PDF format (Elektroniczne Potwierdzenie Odbioru).
         /// </summary>
         [JsonProperty("epo_pdf")]
         EpoPdf,

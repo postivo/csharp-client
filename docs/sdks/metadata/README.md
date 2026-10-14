@@ -9,7 +9,7 @@
 
 ## List
 
-Retrieve a complete list of all types for shipments and their possible values. The method has no body and takes no parameters. The response includes metadata such as carrier types, service types, and more.
+Retrieve available shipment metadata, including carriers, services, paper types, envelopes and other configuration options.
 
 ### Example Usage
 
@@ -33,12 +33,13 @@ var res = await sdk.Metadata.ListAsync();
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 4XX                       | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## GetPredefinedConfigs
 
-Retrieve a complete list of predefined shipment configurations. The method has no body and takes no parameters. The response includes all stored configuration options.
+Retrieve the predefined shipment configuration profiles stored in your account, including their configuration options.
 
 ### Example Usage
 
@@ -62,5 +63,6 @@ var res = await sdk.Metadata.GetPredefinedConfigsAsync();
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 4XX                       | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |

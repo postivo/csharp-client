@@ -20,13 +20,10 @@ namespace Postivo.Models.Requests
         public HTTPMetadata HttpMeta { get; set; } = default!;
 
         /// <summary>
-        /// The request was processed successfully. Group details are included in the response body.
+        /// The request was processed successfully. The response contains an array of groups, or an empty array when no groups exist.
         /// </summary>
         public List<GroupResponse>? GroupResponses { get; set; }
 
-        /// <summary>
-        /// Invalid request.
-        /// </summary>
-        public Models.Components.ErrorResponse? ErrorResponse { get; set; } = null;
+        public Dictionary<string, List<string>> Headers { get; set; } = new Dictionary<string, List<string>>();
     }
 }

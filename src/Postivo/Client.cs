@@ -20,6 +20,9 @@ namespace Postivo
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    /// <summary>
+    /// <see href="https://api.postivo.pl/problems/">Error catalog and operation results</see>
+    /// </summary>
     public interface IClient
     {
         public IAccounts Accounts { get; }
@@ -38,6 +41,9 @@ namespace Postivo
         public ISenders Senders { get; }
     }
 
+    /// <summary>
+    /// <see href="https://api.postivo.pl/problems/">Error catalog and operation results</see>
+    /// </summary>
     public class Client: IClient
     {
         /// <summary>

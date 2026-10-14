@@ -20,7 +20,7 @@ namespace Postivo.Models.Components
     public class ShipmentOptions
     {
         /// <summary>
-        /// ID of the shipment configuration profile stored in the user account.
+        /// ID of the shipment configuration profile stored in the user account. Omit, use null or 0 to apply the default configuration; a positive ID selects a specific profile.
         /// </summary>
         [JsonProperty("predefined_config_id")]
         public long? PredefinedConfigId { get; set; } = null;
@@ -29,13 +29,13 @@ namespace Postivo.Models.Components
         public InlineConfigUnion? InlineConfig { get; set; } = null;
 
         /// <summary>
-        /// ID of the sender stored in the user account.
+        /// ID of the sender stored in the user account. Omit, use null or 0 to select the default sender; a positive ID selects a specific sender.
         /// </summary>
         [JsonProperty("sender_id")]
         public long? SenderId { get; set; } = null;
 
         /// <summary>
-        /// Scheduled dispatch date (ISO 8601).
+        /// Scheduled dispatch date (YYYY-MM-DD). Omit to select the first allowed dispatch date. A supplied date must satisfy the API working-day rules. Null is not allowed.
         /// </summary>
         [JsonProperty("dispatch_date")]
         public DateOnly? DispatchDate { get; set; }
@@ -47,7 +47,7 @@ namespace Postivo.Models.Components
         public MiscInfoUnion? MiscInfo { get; set; } = null;
 
         /// <summary>
-        /// If true, rotate all documents 180° before printing (barcodes will be printed on opposite margins).
+        /// If true, rotate all documents 180° before printing (barcodes will be printed on opposite margins). Omit or use false to disable rotation. Null is not allowed.
         /// </summary>
         [JsonProperty("rotate_documents")]
         public bool? RotateDocuments { get; set; }

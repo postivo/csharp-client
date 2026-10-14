@@ -33,12 +33,13 @@ var res = await sdk.Accounts.GetAsync();
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 401, 403, 4XX                       | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 403, 4XX                            | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## GetSubaccount
 
-Check the account balance and other details, such as the subcredit balance of a subaccount. Subaccounts are additional users who can access your account’s services and data. You can restrict access levels and set privileges for subaccounts in the [User Panel](https://panel.postivo.pl).
+Check the account balance and other details, such as the subcredit balance of a subaccount. Subaccounts are additional users who can access your account's services and data. You can restrict access levels and set privileges for subaccounts in the [User Panel](https://panel.postivo.pl).
 
 Provide the full subaccount login to access its data.
 
@@ -70,5 +71,6 @@ var res = await sdk.Accounts.GetSubaccountAsync(userLogin: "some-login");
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 401, 403, 404, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 403, 404, 4XX                       | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |

@@ -20,14 +20,9 @@ namespace Postivo.Models.Requests
         public HTTPMetadata HttpMeta { get; set; } = default!;
 
         /// <summary>
-        /// The request was processed successfully. Contact details are included in the response body.
+        /// The request was processed successfully. The response contains an array of contacts, or an empty array for the first page of an empty address book.
         /// </summary>
         public List<ContactResponse>? ContactResponses { get; set; }
-
-        /// <summary>
-        /// Invalid request.
-        /// </summary>
-        public Models.Components.ErrorResponse? ErrorResponse { get; set; } = null;
 
         public Dictionary<string, List<string>> Headers { get; set; } = new Dictionary<string, List<string>>();
     }

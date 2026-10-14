@@ -22,17 +22,17 @@ namespace Postivo.Utils
         /// <summary>
         /// The version of the SDK.
         /// </summary>
-        public const string SdkVersion = "0.2.1";
+        public const string SdkVersion = "0.3.9";
 
         /// <summary>
         /// The version of the SDK generator used to create this SDK.
         /// </summary>
-        public const string SdkGenVersion = "2.943.0";
+        public const string SdkGenVersion = "2.948.4";
 
         /// <summary>
         /// The version of the OpenAPI document used to generate this SDK.
         /// </summary>
-        public const string OpenApiDocVersion = "1.0.4";
+        public const string OpenApiDocVersion = "1.1.1";
     }
 }
 

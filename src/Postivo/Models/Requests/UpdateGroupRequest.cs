@@ -21,7 +21,7 @@ namespace Postivo.Models.Requests
         public long Id { get; set; } = default!;
 
         /// <summary>
-        /// A `Group` object with the updated fields.
+        /// Updated contact group details.
         /// </summary>
         [SpeakeasyMetadata("request:mediaType=application/json")]
         public Group Group { get; set; } = default!;

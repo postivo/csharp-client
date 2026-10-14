@@ -29,7 +29,7 @@ namespace Postivo
         /// List senders.
         /// </summary>
         /// <remarks>
-        /// Retrieve the list of allowed senders defined in your account. Senders are registered in your account and must be verified and activated before use. Activated senders have `active: true` property and can be used to send shipments. Inactive senders are also returned (`active: false`), but cannot be used until activated.
+        /// Retrieve the senders defined in your account. Active, verified senders can be used for shipments. Inactive senders are also included in the list.
         /// </remarks>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
@@ -37,7 +37,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<ListSendersResponse> ListAsync(
             RetryConfig? retryConfig = null,
@@ -48,9 +48,11 @@ namespace Postivo
         /// Add a new sender.
         /// </summary>
         /// <remarks>
-        /// Create a new sender on your account. The request must contain a `Sender` object. To prevent fraud, all additional senders are verified by mailing a verification code to the sender’s address. Complete the verification using the `verifySender` method. Verified senders have `active: true` and can be used to send shipments. Inactive senders are also returned (`active: false`), but cannot be used until verification is completed.
+        /// Create a sender using its address details. Additional senders are verified by mailing a verification code to the sender's address. Complete verification with the received code to activate the sender.<br/>
+        /// <br/>
+        /// The sender can be created before the verification letter is sent. If sending the letter fails, retrieve the sender list before retrying creation.
         /// </remarks>
-        /// <param name="request">A `Sender` object with the sender’s properties.</param>
+        /// <param name="request">Sender address and contact details.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="AddSenderResponse"/> response envelope when completed.</returns>
@@ -58,7 +60,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<AddSenderResponse> AddAsync(
             Sender request,
@@ -70,7 +72,7 @@ namespace Postivo
         /// Delete a sender.
         /// </summary>
         /// <remarks>
-        /// Remove a sender from your account by `id`. Pass the sender’s `id` parameter to remove it. The sender is deleted immediately.
+        /// Remove a sender using its system ID. The account's default sender must be retained.
         /// </remarks>
         /// <param name="id">Sender `id` to remove.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
@@ -79,7 +81,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<DeleteSenderResponse> DeleteAsync(
             long id,
@@ -91,7 +93,7 @@ namespace Postivo
         /// Verify sender.
         /// </summary>
         /// <remarks>
-        /// Verify a sender to activate it. After adding a new sender, a letter containing a verification code is mailed to the sender’s address. Provide this code to complete verification.
+        /// Activate a sender using the verification code received by mail. The code must match the current verification request, and the sender must still be awaiting verification.
         /// </remarks>
         /// <param name="id">ID of the sender to verify.</param>
         /// <param name="requestBody">Verification code received in the letter.</param>
@@ -102,7 +104,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<VerifySenderResponse> VerifyAsync(
             long id,
@@ -129,7 +131,7 @@ namespace Postivo
         /// List senders.
         /// </summary>
         /// <remarks>
-        /// Retrieve the list of allowed senders defined in your account. Senders are registered in your account and must be verified and activated before use. Activated senders have `active: true` property and can be used to send shipments. Inactive senders are also returned (`active: false`), but cannot be used until activated.
+        /// Retrieve the senders defined in your account. Active, verified senders can be used for shipments. Inactive senders are also included in the list.
         /// </remarks>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
@@ -137,7 +139,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<ListSendersResponse> ListAsync(
             RetryConfig? retryConfig = null,
@@ -152,7 +154,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             if (SDKConfiguration.SecuritySource != null)
@@ -258,6 +260,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -310,35 +338,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new ListSendersResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -346,9 +347,11 @@ namespace Postivo
         /// Add a new sender.
         /// </summary>
         /// <remarks>
-        /// Create a new sender on your account. The request must contain a `Sender` object. To prevent fraud, all additional senders are verified by mailing a verification code to the sender’s address. Complete the verification using the `verifySender` method. Verified senders have `active: true` and can be used to send shipments. Inactive senders are also returned (`active: false`), but cannot be used until verification is completed.
+        /// Create a sender using its address details. Additional senders are verified by mailing a verification code to the sender's address. Complete verification with the received code to activate the sender.<br/>
+        /// <br/>
+        /// The sender can be created before the verification letter is sent. If sending the letter fails, retrieve the sender list before retrying creation.
         /// </remarks>
-        /// <param name="request">A `Sender` object with the sender’s properties.</param>
+        /// <param name="request">Sender address and contact details.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="AddSenderResponse"/> response envelope when completed.</returns>
@@ -356,7 +359,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<AddSenderResponse> AddAsync(
             Sender request,
@@ -374,7 +377,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             var serializedBody = RequestBodySerializer.Serialize(request, "Request", "json", false, false);
@@ -487,6 +490,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -539,35 +568,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new AddSenderResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -575,7 +577,7 @@ namespace Postivo
         /// Delete a sender.
         /// </summary>
         /// <remarks>
-        /// Remove a sender from your account by `id`. Pass the sender’s `id` parameter to remove it. The sender is deleted immediately.
+        /// Remove a sender using its system ID. The account's default sender must be retained.
         /// </remarks>
         /// <param name="id">Sender `id` to remove.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
@@ -584,7 +586,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<DeleteSenderResponse> DeleteAsync(
             long id,
@@ -694,6 +696,32 @@ namespace Postivo
                     Headers = Utilities.CollectHeaders(httpResponse.Headers)
                 };
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -746,35 +774,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new DeleteSenderResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -782,7 +783,7 @@ namespace Postivo
         /// Verify sender.
         /// </summary>
         /// <remarks>
-        /// Verify a sender to activate it. After adding a new sender, a letter containing a verification code is mailed to the sender’s address. Provide this code to complete verification.
+        /// Activate a sender using the verification code received by mail. The code must match the current verification request, and the sender must still be awaiting verification.
         /// </remarks>
         /// <param name="id">ID of the sender to verify.</param>
         /// <param name="requestBody">Verification code received in the letter.</param>
@@ -793,7 +794,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<VerifySenderResponse> VerifyAsync(
             long id,
@@ -913,9 +914,9 @@ namespace Postivo
                     Headers = Utilities.CollectHeaders(httpResponse.Headers)
                 };
             }
-            else if(responseStatusCode == 404)
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
             {
-                if(Utilities.IsContentTypeMatch("application/json", contentType))
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
                 {
                     var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
                     Models.Errors.ErrorResponsePayload payload;
@@ -991,35 +992,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new VerifySenderResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
     }

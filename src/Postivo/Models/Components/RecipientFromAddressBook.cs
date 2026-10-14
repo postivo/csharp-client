@@ -30,7 +30,7 @@ namespace Postivo.Models.Components
         public string? CustomId { get; set; } = null;
 
         /// <summary>
-        /// Optional postscript printed above the recipient data on the envelope.
+        /// Optional postscript printed above the recipient data on the envelope. The string "0" is preserved.
         /// </summary>
         [JsonProperty("postscript")]
         public string? Postscript { get; set; } = null;

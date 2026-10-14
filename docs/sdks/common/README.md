@@ -10,7 +10,7 @@ Common
 
 ## Ping
 
-Check the API connection and current availability status. The response also includes the current API version.
+Check the connection to Postivo and service availability. The result also includes the current API version.
 
 ### Example Usage
 
@@ -33,5 +33,6 @@ var res = await sdk.Common.PingAsync();
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| Postivo.Models.Errors.ErrorResponse | 405                                 | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 400, 4XX                            | application/problem+json            |
-| Postivo.Models.Errors.ErrorResponse | 503, 5XX                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |

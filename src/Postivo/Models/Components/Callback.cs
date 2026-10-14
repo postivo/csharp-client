@@ -18,13 +18,13 @@ namespace Postivo.Models.Components
     public class Callback
     {
         /// <summary>
-        /// Callback target URL.
+        /// Non-empty absolute HTTP or HTTPS callback target URL. Use percent encoding for characters such as spaces in paths.
         /// </summary>
         [JsonProperty("url")]
         public string Url { get; set; } = default!;
 
         /// <summary>
-        /// Bearer token to include in callback requests for authentication.
+        /// Bearer token to include in callback requests for authentication. Leading and trailing whitespace is removed before saving. An omitted, null, empty or whitespace-only token uses the account token. The string "0" overrides the account token. The submitted value can contain at most 255 characters.
         /// </summary>
         [JsonProperty("user_token")]
         public string? UserToken { get; set; } = null;

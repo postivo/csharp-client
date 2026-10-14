@@ -12,6 +12,7 @@ namespace Postivo.Models.Requests
     using Newtonsoft.Json;
     using Postivo.Models.Components;
     using Postivo.Utils;
+    using System.Collections.Generic;
 
     public class GetSubaccountDetailsResponse
     {
@@ -23,9 +24,6 @@ namespace Postivo.Models.Requests
         /// </summary>
         public AccountResponse? AccountResponse { get; set; }
 
-        /// <summary>
-        /// Unauthorized.
-        /// </summary>
-        public Models.Components.ErrorResponse? ErrorResponse { get; set; } = null;
+        public Dictionary<string, List<string>> Headers { get; set; } = new Dictionary<string, List<string>>();
     }
 }

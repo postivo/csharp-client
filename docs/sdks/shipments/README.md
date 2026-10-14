@@ -12,7 +12,7 @@
 
 ## Status
 
-Retrieve the current status and details for one or more shipments by their `ids`. Pass the unique shipment IDs (returned when the shipments were created) as a path parameter. To query provide a list (up to **50** IDs per call). For larger batches, split the requests.
+Retrieve the current status and details for up to **50 shipments** using the IDs assigned when they were created. Separate multiple IDs with commas. Duplicate IDs are processed once.
 
 ### Example Usage
 
@@ -33,9 +33,9 @@ var res = await sdk.Shipments.StatusAsync(ids: new List<string>() {
 
 ### Parameters
 
-| Parameter                                                                                                           | Type                                                                                                                | Required                                                                                                            | Description                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `Ids`                                                                                                               | List<*string*>                                                                                                      | :heavy_check_mark:                                                                                                  | Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call. |
+| Parameter                                                                                                                                                                                                                                                                            | Type                                                                                                                                                                                                                                                                                 | Required                                                                                                                                                                                                                                                                             | Description                                                                                                                                                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Ids`                                                                                                                                                                                                                                                                                | List<*string*>                                                                                                                                                                                                                                                                       | :heavy_check_mark:                                                                                                                                                                                                                                                                   | Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call. Empty items, including leading, trailing or repeated commas, are rejected with HTTP 400. Surrounding whitespace is ignored and duplicate IDs are processed once. |
 
 ### Response
 
@@ -45,14 +45,15 @@ var res = await sdk.Shipments.StatusAsync(ids: new List<string>() {
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 404, 4XX             | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 404, 4XX                  | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## Cancel
 
-Cancel shipments that have not yet been processed by their `ids`. Pass the unique shipment IDs (returned when the shipment was created) as a parameter. To cancel multiple shipments at once, provide a list of IDs (up to **50** per call). For larger volumes, split the operation into multiple requests. Only shipments with status `ACCEPTED` can be cancelled.
+Cancel up to **50 shipments** using the IDs assigned when they were created. Separate multiple IDs with commas. Only shipments with status `ACCEPTED` can be cancelled; duplicate IDs are processed once.
 
-If duplicate shipment IDs are provided in a single call, the API processes each unique ID only once.
+Check the result for each shipment, as individual cancellations can succeed or fail independently. If processing is interrupted, earlier cancellations may already have completed; check shipment status before retrying.
 
 ### Example Usage
 
@@ -73,9 +74,9 @@ var res = await sdk.Shipments.CancelAsync(ids: new List<string>() {
 
 ### Parameters
 
-| Parameter                                                                                                           | Type                                                                                                                | Required                                                                                                            | Description                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `Ids`                                                                                                               | List<*string*>                                                                                                      | :heavy_check_mark:                                                                                                  | Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call. |
+| Parameter                                                                                                                                                                                                                                                                            | Type                                                                                                                                                                                                                                                                                 | Required                                                                                                                                                                                                                                                                             | Description                                                                                                                                                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Ids`                                                                                                                                                                                                                                                                                | List<*string*>                                                                                                                                                                                                                                                                       | :heavy_check_mark:                                                                                                                                                                                                                                                                   | Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call. Empty items, including leading, trailing or repeated commas, are rejected with HTTP 400. Surrounding whitespace is ignored and duplicate IDs are processed once. |
 
 ### Response
 
@@ -85,14 +86,13 @@ var res = await sdk.Shipments.CancelAsync(ids: new List<string>() {
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 404, 4XX             | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 404, 4XX                  | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## Dispatch
 
-Send a shipment to one or multiple recipients in a single request. Provide a `Shipment` object. The object includes properties that define the shipment (recipient details, included documents, and optional settings). Some fields are required.
-
-The system accepts up to **50** recipients per call. For larger volumes, split the operation into multiple requests.
+Submit shipments for up to **50 recipients** using their addresses or Address Book identifiers, documents and optional shipment settings. For larger batches, split the operation into multiple calls. Check each recipient result, as individual shipments can succeed or fail independently.
 
 ### Example Usage: advanced_config
 
@@ -293,12 +293,13 @@ var res = await sdk.Shipments.DispatchAsync(req);
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 415, 4XX                  | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## Documents
 
-Download documents related to a shipment by its `id`. Pass the unique shipment `id` (returned when the shipment was created) as a parameter. The second parameter is the document type to download. Supported document types include: dispatch certificate, envelope template, and EPO (in PDF or XML formats).
+Retrieve a shipment document using the shipment ID and document type. Available documents include dispatch confirmations, envelope previews, EPO certificate visualizations in PDF format and EPO certificates in XML format. Availability depends on the document type and shipment state.
 
 ### Example Usage
 
@@ -333,14 +334,13 @@ var res = await sdk.Shipments.DocumentsAsync(
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 404, 4XX             | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 404, 4XX                  | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## Price
 
-Check the price of a shipment for one or multiple recipients. Provide a `Shipment` object in the request. Each object includes properties such as recipient details, included documents, and optional settings. Some fields are required.
-
-The system accepts up to **50** recipients per call. For larger volumes, split the operation into multiple requests.
+Calculate shipment prices for up to **50 recipients** using their addresses or Address Book identifiers, documents and optional shipment settings. For larger batches, split the operation into multiple calls. Check each recipient result to determine whether pricing succeeded.
 
 ### Example Usage: advanced_config
 
@@ -526,5 +526,6 @@ var res = await sdk.Shipments.PriceAsync(req);
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 415, 4XX                  | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |

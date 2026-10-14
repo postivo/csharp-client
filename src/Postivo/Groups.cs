@@ -29,7 +29,7 @@ namespace Postivo
         /// List groups.
         /// </summary>
         /// <remarks>
-        /// Retrieve the full list of groups defined in your account’s Address Book.
+        /// Retrieve all contact groups defined in your account's Address Book. An Address Book without groups returns an empty list.
         /// </remarks>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
@@ -37,7 +37,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<ListGroupsResponse> ListAsync(
             RetryConfig? retryConfig = null,
@@ -48,9 +48,9 @@ namespace Postivo
         /// Add a new group.
         /// </summary>
         /// <remarks>
-        /// Create a new contact group in your account’s Address Book.
+        /// Create a new contact group in your account's Address Book.
         /// </remarks>
-        /// <param name="request">A `Group` object with the group’s properties.</param>
+        /// <param name="request">Contact group details to create.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="AddGroupResponse"/> response envelope when completed.</returns>
@@ -58,7 +58,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<AddGroupResponse> AddAsync(
             Group request,
@@ -70,7 +70,7 @@ namespace Postivo
         /// Retrieve group details.
         /// </summary>
         /// <remarks>
-        /// Get the details of a single group from your Address Book by its `id` (returned when the group was created).
+        /// Get the details of an Address Book group using the system ID assigned when the group was created.
         /// </remarks>
         /// <param name="id">Group id to fetch.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
@@ -79,7 +79,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<GetGroupByIdResponse> GetAsync(
             long id,
@@ -91,10 +91,10 @@ namespace Postivo
         /// Update a group.
         /// </summary>
         /// <remarks>
-        /// Update a group’s details by ID.
+        /// Update an Address Book group using its system ID. Submitting unchanged details leaves the group unchanged.
         /// </remarks>
         /// <param name="id">Group `id` to update.</param>
-        /// <param name="groupP">A `Group` object with the updated fields.</param>
+        /// <param name="groupP">Updated contact group details.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="UpdateGroupResponse"/> response envelope when completed.</returns>
@@ -102,7 +102,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<UpdateGroupResponse> UpdateAsync(
             long id,
@@ -115,9 +115,7 @@ namespace Postivo
         /// Delete a group.
         /// </summary>
         /// <remarks>
-        /// Remove a group from your account’s Address Book by `ID`. Pass the group’s `id` to remove it. The group is deleted immediately from the Address Book.<br/>
-        /// <br/>
-        /// If you also want to remove contacts that belong to this group, set the parameter `contacts` to `delete`. The default is `contacts: detach`, which detaches contacts from the removed group but leaves them in the Address Book.
+        /// Remove an Address Book group using its system ID. By default, its contacts remain in the Address Book and their membership in the removed group is cleared. You can also choose to delete the contacts belonging to the group.
         /// </remarks>
         /// <param name="id">Group `id` to remove.</param>
         /// <param name="contacts">How to handle contacts that belong to the group.</param>
@@ -127,7 +125,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<DeleteGroupResponse> DeleteAsync(
             long id,
@@ -154,7 +152,7 @@ namespace Postivo
         /// List groups.
         /// </summary>
         /// <remarks>
-        /// Retrieve the full list of groups defined in your account’s Address Book.
+        /// Retrieve all contact groups defined in your account's Address Book. An Address Book without groups returns an empty list.
         /// </remarks>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
@@ -162,7 +160,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<ListGroupsResponse> ListAsync(
             RetryConfig? retryConfig = null,
@@ -177,7 +175,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             if (SDKConfiguration.SecuritySource != null)
@@ -283,6 +281,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -335,35 +359,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new ListGroupsResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -371,9 +368,9 @@ namespace Postivo
         /// Add a new group.
         /// </summary>
         /// <remarks>
-        /// Create a new contact group in your account’s Address Book.
+        /// Create a new contact group in your account's Address Book.
         /// </remarks>
-        /// <param name="request">A `Group` object with the group’s properties.</param>
+        /// <param name="request">Contact group details to create.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="AddGroupResponse"/> response envelope when completed.</returns>
@@ -381,7 +378,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<AddGroupResponse> AddAsync(
             Group request,
@@ -399,7 +396,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             var serializedBody = RequestBodySerializer.Serialize(request, "Request", "json", false, false);
@@ -512,6 +509,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -564,35 +587,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new AddGroupResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -600,7 +596,7 @@ namespace Postivo
         /// Retrieve group details.
         /// </summary>
         /// <remarks>
-        /// Get the details of a single group from your Address Book by its `id` (returned when the group was created).
+        /// Get the details of an Address Book group using the system ID assigned when the group was created.
         /// </remarks>
         /// <param name="id">Group id to fetch.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
@@ -609,7 +605,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<GetGroupByIdResponse> GetAsync(
             long id,
@@ -630,7 +626,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             if (SDKConfiguration.SecuritySource != null)
@@ -736,6 +732,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -788,35 +810,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new GetGroupByIdResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -824,10 +819,10 @@ namespace Postivo
         /// Update a group.
         /// </summary>
         /// <remarks>
-        /// Update a group’s details by ID.
+        /// Update an Address Book group using its system ID. Submitting unchanged details leaves the group unchanged.
         /// </remarks>
         /// <param name="id">Group `id` to update.</param>
-        /// <param name="groupP">A `Group` object with the updated fields.</param>
+        /// <param name="groupP">Updated contact group details.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="UpdateGroupResponse"/> response envelope when completed.</returns>
@@ -835,7 +830,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<UpdateGroupResponse> UpdateAsync(
             long id,
@@ -860,7 +855,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             var serializedBody = RequestBodySerializer.Serialize(request, "Group", "json", false, false);
@@ -973,6 +968,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -1025,35 +1046,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new UpdateGroupResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -1061,9 +1055,7 @@ namespace Postivo
         /// Delete a group.
         /// </summary>
         /// <remarks>
-        /// Remove a group from your account’s Address Book by `ID`. Pass the group’s `id` to remove it. The group is deleted immediately from the Address Book.<br/>
-        /// <br/>
-        /// If you also want to remove contacts that belong to this group, set the parameter `contacts` to `delete`. The default is `contacts: detach`, which detaches contacts from the removed group but leaves them in the Address Book.
+        /// Remove an Address Book group using its system ID. By default, its contacts remain in the Address Book and their membership in the removed group is cleared. You can also choose to delete the contacts belonging to the group.
         /// </remarks>
         /// <param name="id">Group `id` to remove.</param>
         /// <param name="contacts">How to handle contacts that belong to the group.</param>
@@ -1073,7 +1065,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<DeleteGroupResponse> DeleteAsync(
             long id,
@@ -1185,6 +1177,32 @@ namespace Postivo
                     Headers = Utilities.CollectHeaders(httpResponse.Headers)
                 };
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -1237,35 +1255,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new DeleteGroupResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
     }

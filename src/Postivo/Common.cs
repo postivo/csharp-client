@@ -31,7 +31,7 @@ namespace Postivo
         /// Check API availability and version.
         /// </summary>
         /// <remarks>
-        /// Check the API connection and current availability status. The response also includes the current API version.
+        /// Check the connection to Postivo and service availability. The result also includes the current API version.
         /// </remarks>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
@@ -39,7 +39,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<Models.Requests.PingResponse> PingAsync(
             RetryConfig? retryConfig = null,
@@ -67,7 +67,7 @@ namespace Postivo
         /// Check API availability and version.
         /// </summary>
         /// <remarks>
-        /// Check the API connection and current availability status. The response also includes the current API version.
+        /// Check the connection to Postivo and service availability. The result also includes the current API version.
         /// </remarks>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
@@ -75,7 +75,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<Models.Requests.PingResponse> PingAsync(
             RetryConfig? retryConfig = null,
@@ -90,7 +90,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             var hookCtx = new HookContext(SDKConfiguration, baseUrl, "ping", null, null, cancellationToken);
@@ -191,6 +191,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(responseStatusCode == 405)
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -243,35 +269,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new Models.Requests.PingResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
     }

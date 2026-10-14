@@ -21,7 +21,7 @@ namespace Postivo.Models.Requests
         public long Id { get; set; } = default!;
 
         /// <summary>
-        /// A `Contact` object with the updated fields.
+        /// Updated contact details.
         /// </summary>
         [SpeakeasyMetadata("request:mediaType=application/json")]
         public Contact Contact { get; set; } = default!;

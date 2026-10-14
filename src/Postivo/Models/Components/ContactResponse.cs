@@ -73,13 +73,13 @@ namespace Postivo.Models.Components
         public string? PhoneNumber { get; set; } = null;
 
         /// <summary>
-        /// Custom (external) contact ID; must be unique per contact.
+        /// Custom (external) contact ID; must be unique per contact. Use at most 16 ASCII letters, digits, underscores or hyphens. An omitted, null or empty value removes the external ID. The string "0" is a valid ID and is preserved in writes, responses and external-ID routes.
         /// </summary>
         [JsonProperty("ext_id")]
         public string? ExtId { get; set; } = null;
 
         /// <summary>
-        /// IDs of groups the contact belongs to.
+        /// Positive IDs of groups the contact belongs to. Missing or foreign groups are ignored.
         /// </summary>
         [JsonProperty("group_ids")]
         public List<long>? GroupIds { get; set; } = null;

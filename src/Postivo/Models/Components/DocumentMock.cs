@@ -18,7 +18,7 @@ namespace Postivo.Models.Components
     public class DocumentMock
     {
         /// <summary>
-        /// Number of pages in the mock document.
+        /// Number of pages in the mock document; at least one page is required.
         /// </summary>
         [JsonProperty("pages")]
         public long Pages { get; set; } = default!;

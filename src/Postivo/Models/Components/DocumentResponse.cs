@@ -27,6 +27,6 @@ namespace Postivo.Models.Components
         /// Base64-encoded document content.
         /// </summary>
         [JsonProperty("file_stream")]
-        public string? FileStream { get; set; }
+        public string FileStream { get; set; } = default!;
     }
 }

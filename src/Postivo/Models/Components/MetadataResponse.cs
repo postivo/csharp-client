@@ -15,7 +15,7 @@ namespace Postivo.Models.Components
     using System.Collections.Generic;
 
     /// <summary>
-    /// Metadata response.
+    /// Available carriers, services, paper types, envelopes and other shipment configuration data.
     /// </summary>
     public class MetadataResponse
     {

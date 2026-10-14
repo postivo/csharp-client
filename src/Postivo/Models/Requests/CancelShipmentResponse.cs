@@ -20,14 +20,9 @@ namespace Postivo.Models.Requests
         public HTTPMetadata HttpMeta { get; set; } = default!;
 
         /// <summary>
-        /// The request was processed successfully. Check the shipment cancellation statuses in the response body.
+        /// The batch was processed. Check every shipment cancellation status and X-Success-Count/X-Error-Count. Item statuses 404, 409 or 500 do not change the batch HTTP status 200.
         /// </summary>
         public List<ShipmentCancellation>? ShipmentCancellations { get; set; }
-
-        /// <summary>
-        /// Invalid request.
-        /// </summary>
-        public Models.Components.ErrorResponse? ErrorResponse { get; set; } = null;
 
         public Dictionary<string, List<string>> Headers { get; set; } = new Dictionary<string, List<string>>();
     }

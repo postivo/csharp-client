@@ -24,7 +24,7 @@ namespace Postivo.Models.Components
         public string Name { get; set; } = default!;
 
         /// <summary>
-        /// Optional group description.
+        /// Optional group description. An omitted, null or empty value clears the description; the string "0" is preserved.
         /// </summary>
         [JsonProperty("description")]
         public string? Description { get; set; } = null;

@@ -29,9 +29,9 @@ namespace Postivo
         /// Retrieve shipment details with status events.
         /// </summary>
         /// <remarks>
-        /// Retrieve the current status and details for one or more shipments by their `ids`. Pass the unique shipment IDs (returned when the shipments were created) as a path parameter. To query provide a list (up to **50** IDs per call). For larger batches, split the requests.
+        /// Retrieve the current status and details for up to **50 shipments** using the IDs assigned when they were created. Separate multiple IDs with commas. Duplicate IDs are processed once.
         /// </remarks>
-        /// <param name="ids">Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call.</param>
+        /// <param name="ids">Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call. Empty items, including leading, trailing or repeated commas, are rejected with HTTP 400. Surrounding whitespace is ignored and duplicate IDs are processed once.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="GetStatusResponse"/> response envelope when completed.</returns>
@@ -39,7 +39,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<GetStatusResponse> StatusAsync(
             List<string> ids,
@@ -51,11 +51,11 @@ namespace Postivo
         /// Cancel shipments.
         /// </summary>
         /// <remarks>
-        /// Cancel shipments that have not yet been processed by their `ids`. Pass the unique shipment IDs (returned when the shipment was created) as a parameter. To cancel multiple shipments at once, provide a list of IDs (up to **50** per call). For larger volumes, split the operation into multiple requests. Only shipments with status `ACCEPTED` can be cancelled.<br/>
+        /// Cancel up to **50 shipments** using the IDs assigned when they were created. Separate multiple IDs with commas. Only shipments with status `ACCEPTED` can be cancelled; duplicate IDs are processed once.<br/>
         /// <br/>
-        /// If duplicate shipment IDs are provided in a single call, the API processes each unique ID only once.
+        /// Check the result for each shipment, as individual cancellations can succeed or fail independently. If processing is interrupted, earlier cancellations may already have completed; check shipment status before retrying.
         /// </remarks>
-        /// <param name="ids">Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call.</param>
+        /// <param name="ids">Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call. Empty items, including leading, trailing or repeated commas, are rejected with HTTP 400. Surrounding whitespace is ignored and duplicate IDs are processed once.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="CancelShipmentResponse"/> response envelope when completed.</returns>
@@ -63,7 +63,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<CancelShipmentResponse> CancelAsync(
             List<string> ids,
@@ -75,11 +75,9 @@ namespace Postivo
         /// Dispatch a new shipment.
         /// </summary>
         /// <remarks>
-        /// Send a shipment to one or multiple recipients in a single request. Provide a `Shipment` object. The object includes properties that define the shipment (recipient details, included documents, and optional settings). Some fields are required.<br/>
-        /// <br/>
-        /// The system accepts up to **50** recipients per call. For larger volumes, split the operation into multiple requests.
+        /// Submit shipments for up to **50 recipients** using their addresses or Address Book identifiers, documents and optional shipment settings. For larger batches, split the operation into multiple calls. Check each recipient result, as individual shipments can succeed or fail independently.
         /// </remarks>
-        /// <param name="request">A `Shipment` object with the shipment’s properties.</param>
+        /// <param name="request">Shipment recipients, documents and optional settings.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="ShipmentDispatchResponse"/> response envelope when completed.</returns>
@@ -87,7 +85,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<ShipmentDispatchResponse> DispatchAsync(
             Shipment request,
@@ -99,7 +97,7 @@ namespace Postivo
         /// Retrieve documents related to a shipment.
         /// </summary>
         /// <remarks>
-        /// Download documents related to a shipment by its `id`. Pass the unique shipment `id` (returned when the shipment was created) as a parameter. The second parameter is the document type to download. Supported document types include: dispatch certificate, envelope template, and EPO (in PDF or XML formats).
+        /// Retrieve a shipment document using the shipment ID and document type. Available documents include dispatch confirmations, envelope previews, EPO certificate visualizations in PDF format and EPO certificates in XML format. Availability depends on the document type and shipment state.
         /// </remarks>
         /// <param name="id">Single shipment ID assigned by the system when the shipment was created.</param>
         /// <param name="type">Type of document/certificate to generate.</param>
@@ -110,7 +108,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<GetDocumentsResponse> DocumentsAsync(
             string id,
@@ -123,9 +121,7 @@ namespace Postivo
         /// Check the shipment price.
         /// </summary>
         /// <remarks>
-        /// Check the price of a shipment for one or multiple recipients. Provide a `Shipment` object in the request. Each object includes properties such as recipient details, included documents, and optional settings. Some fields are required.<br/>
-        /// <br/>
-        /// The system accepts up to **50** recipients per call. For larger volumes, split the operation into multiple requests.
+        /// Calculate shipment prices for up to **50 recipients** using their addresses or Address Book identifiers, documents and optional shipment settings. For larger batches, split the operation into multiple calls. Check each recipient result to determine whether pricing succeeded.
         /// </remarks>
         /// <param name="request">To price a single shipment for one or multiple recipients, include a `Shipment` object with the shipment’s properties in the request body.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
@@ -135,7 +131,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public  Task<ShipmentPriceResponse> PriceAsync(
             Shipment request,
@@ -161,9 +157,9 @@ namespace Postivo
         /// Retrieve shipment details with status events.
         /// </summary>
         /// <remarks>
-        /// Retrieve the current status and details for one or more shipments by their `ids`. Pass the unique shipment IDs (returned when the shipments were created) as a path parameter. To query provide a list (up to **50** IDs per call). For larger batches, split the requests.
+        /// Retrieve the current status and details for up to **50 shipments** using the IDs assigned when they were created. Separate multiple IDs with commas. Duplicate IDs are processed once.
         /// </remarks>
-        /// <param name="ids">Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call.</param>
+        /// <param name="ids">Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call. Empty items, including leading, trailing or repeated commas, are rejected with HTTP 400. Surrounding whitespace is ignored and duplicate IDs are processed once.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="GetStatusResponse"/> response envelope when completed.</returns>
@@ -171,7 +167,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<GetStatusResponse> StatusAsync(
             List<string> ids,
@@ -194,7 +190,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             if (SDKConfiguration.SecuritySource != null)
@@ -301,6 +297,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -353,35 +375,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new GetStatusResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -389,11 +384,11 @@ namespace Postivo
         /// Cancel shipments.
         /// </summary>
         /// <remarks>
-        /// Cancel shipments that have not yet been processed by their `ids`. Pass the unique shipment IDs (returned when the shipment was created) as a parameter. To cancel multiple shipments at once, provide a list of IDs (up to **50** per call). For larger volumes, split the operation into multiple requests. Only shipments with status `ACCEPTED` can be cancelled.<br/>
+        /// Cancel up to **50 shipments** using the IDs assigned when they were created. Separate multiple IDs with commas. Only shipments with status `ACCEPTED` can be cancelled; duplicate IDs are processed once.<br/>
         /// <br/>
-        /// If duplicate shipment IDs are provided in a single call, the API processes each unique ID only once.
+        /// Check the result for each shipment, as individual cancellations can succeed or fail independently. If processing is interrupted, earlier cancellations may already have completed; check shipment status before retrying.
         /// </remarks>
-        /// <param name="ids">Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call.</param>
+        /// <param name="ids">Shipment IDs assigned by the system (comma-separated). The system accepts a maximum of **50** identifiers per call. Empty items, including leading, trailing or repeated commas, are rejected with HTTP 400. Surrounding whitespace is ignored and duplicate IDs are processed once.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="CancelShipmentResponse"/> response envelope when completed.</returns>
@@ -401,7 +396,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<CancelShipmentResponse> CancelAsync(
             List<string> ids,
@@ -424,7 +419,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             if (SDKConfiguration.SecuritySource != null)
@@ -531,6 +526,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -583,35 +604,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new CancelShipmentResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -619,11 +613,9 @@ namespace Postivo
         /// Dispatch a new shipment.
         /// </summary>
         /// <remarks>
-        /// Send a shipment to one or multiple recipients in a single request. Provide a `Shipment` object. The object includes properties that define the shipment (recipient details, included documents, and optional settings). Some fields are required.<br/>
-        /// <br/>
-        /// The system accepts up to **50** recipients per call. For larger volumes, split the operation into multiple requests.
+        /// Submit shipments for up to **50 recipients** using their addresses or Address Book identifiers, documents and optional shipment settings. For larger batches, split the operation into multiple calls. Check each recipient result, as individual shipments can succeed or fail independently.
         /// </remarks>
-        /// <param name="request">A `Shipment` object with the shipment’s properties.</param>
+        /// <param name="request">Shipment recipients, documents and optional settings.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
         /// <param name="cancellationToken">An optional cancellation token to signal when the operation should be aborted.</param>
         /// <returns>An awaitable task that returns a <see cref="ShipmentDispatchResponse"/> response envelope when completed.</returns>
@@ -631,7 +623,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<ShipmentDispatchResponse> DispatchAsync(
             Shipment request,
@@ -649,7 +641,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             var serializedBody = RequestBodySerializer.Serialize(request, "Request", "json", false, false);
@@ -762,6 +754,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -814,35 +832,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new ShipmentDispatchResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -850,7 +841,7 @@ namespace Postivo
         /// Retrieve documents related to a shipment.
         /// </summary>
         /// <remarks>
-        /// Download documents related to a shipment by its `id`. Pass the unique shipment `id` (returned when the shipment was created) as a parameter. The second parameter is the document type to download. Supported document types include: dispatch certificate, envelope template, and EPO (in PDF or XML formats).
+        /// Retrieve a shipment document using the shipment ID and document type. Available documents include dispatch confirmations, envelope previews, EPO certificate visualizations in PDF format and EPO certificates in XML format. Availability depends on the document type and shipment state.
         /// </remarks>
         /// <param name="id">Single shipment ID assigned by the system when the shipment was created.</param>
         /// <param name="type">Type of document/certificate to generate.</param>
@@ -861,7 +852,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<GetDocumentsResponse> DocumentsAsync(
             string id,
@@ -886,7 +877,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             if (SDKConfiguration.SecuritySource != null)
@@ -993,6 +984,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -1045,35 +1062,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new GetDocumentsResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
 
@@ -1081,9 +1071,7 @@ namespace Postivo
         /// Check the shipment price.
         /// </summary>
         /// <remarks>
-        /// Check the price of a shipment for one or multiple recipients. Provide a `Shipment` object in the request. Each object includes properties such as recipient details, included documents, and optional settings. Some fields are required.<br/>
-        /// <br/>
-        /// The system accepts up to **50** recipients per call. For larger volumes, split the operation into multiple requests.
+        /// Calculate shipment prices for up to **50 recipients** using their addresses or Address Book identifiers, documents and optional shipment settings. For larger batches, split the operation into multiple calls. Check each recipient result to determine whether pricing succeeded.
         /// </remarks>
         /// <param name="request">To price a single shipment for one or multiple recipients, include a `Shipment` object with the shipment’s properties in the request body.</param>
         /// <param name="retryConfig">The retry configuration to use for this operation.</param>
@@ -1093,7 +1081,7 @@ namespace Postivo
         /// <exception cref="OperationCanceledException">The operation was aborted via the provided cancellation token.</exception>
         /// <exception cref="HttpRequestException">The HTTP request failed due to network issues.</exception>
         /// <exception cref="ResponseValidationException">The response body could not be deserialized.</exception>
-        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Thrown when the API returns a 4XX or 5XX response.</exception>
+        /// <exception cref="Models.Errors.ErrorResponse">Invalid request. Code 400-15 uses the <a href="https://api.postivo.pl/problems/bad-request/">bad-request problem type</a> when the request validator cannot match the operation. Code 400-1 uses <a href="https://api.postivo.pl/problems/invalid-body-property-format/">invalid request body format</a> with detail "The request body is missing or malformed.". Other validation failures describe the affected property. See the <a href="https://api.postivo.pl/problems/">error catalog</a>. Thrown when the API returns a 4XX or 5XX response.</exception>
         /// <exception cref="APIException">Default API Exception.</exception>
         public async  Task<ShipmentPriceResponse> PriceAsync(
             Shipment request,
@@ -1111,7 +1099,7 @@ namespace Postivo
 
             if (!httpRequest.Headers.Contains("Accept"))
             {
-                httpRequest.Headers.Add("Accept", "application/json;q=1, application/problem+json;q=0");
+                httpRequest.Headers.Add("Accept", "application/json");
             }
 
             var serializedBody = RequestBodySerializer.Serialize(request, "Request", "json", false, false);
@@ -1224,6 +1212,32 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
+            else if(new List<int>{401, 405}.Contains(responseStatusCode))
+            {
+                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
+                {
+                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                    Models.Errors.ErrorResponsePayload payload;
+                    try
+                    {
+                        payload = ResponseBodyDeserializer.DeserializeNotNull<Models.Errors.ErrorResponsePayload>(httpResponseBody, NullValueHandling.Ignore);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ResponseValidationException("Failed to deserialize response body into Models.Errors.ErrorResponsePayload.", httpRequest, httpResponse, httpResponseBody, ex);
+                    }
+
+                    payload.HttpMeta = new Models.Components.HTTPMetadata()
+                    {
+                        Response = httpResponse,
+                        Request = httpRequest
+                    };
+
+                    throw new Models.Errors.ErrorResponse(payload, httpRequest, httpResponse, httpResponseBody);
+                }
+
+                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
+            }
             else if(responseStatusCode >= 400 && responseStatusCode < 500)
             {
                 if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
@@ -1276,35 +1290,8 @@ namespace Postivo
 
                 throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
             }
-            else
-            {
-                if(Utilities.IsContentTypeMatch("application/problem+json", contentType))
-                {
-                    var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-                    Models.Components.ErrorResponse obj;
-                    try
-                    {
-                        obj = ResponseBodyDeserializer.DeserializeNotNull<Models.Components.ErrorResponse>(httpResponseBody, NullValueHandling.Ignore);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ResponseValidationException("Failed to deserialize response body into Models.Components.ErrorResponse.", httpRequest, httpResponse, httpResponseBody, ex);
-                    }
 
-                    var response = new ShipmentPriceResponse()
-                    {
-                        HttpMeta = new Models.Components.HTTPMetadata()
-                        {
-                            Response = httpResponse,
-                            Request = httpRequest
-                        }
-                    };
-                    response.ErrorResponse = obj;
-                    return response;
-                }
-
-                throw new Models.Errors.APIException("Unknown content type received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
-            }
+            throw new Models.Errors.APIException("Unknown status code received", httpRequest, httpResponse, await httpResponse.Content.ReadAsStringAsync());
         }
 
     }

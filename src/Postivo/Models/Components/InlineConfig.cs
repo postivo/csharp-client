@@ -13,24 +13,24 @@ namespace Postivo.Models.Components
     using Postivo.Utils;
 
     /// <summary>
-    /// Shipment configuration parameters. Overrides settings loaded from `predefined_config_id`.
+    /// Shipment configuration parameters. Overrides settings loaded from `predefined_config_id`. Explicit `false` disables the corresponding print option; omitted optional fields retain the profile setting.
     /// </summary>
     public class InlineConfig
     {
         /// <summary>
-        /// Preferred carrier identifier.
+        /// Preferred carrier identifier. Use 0 to retain the profile setting or select the default carrier.
         /// </summary>
         [JsonProperty("carrier_id")]
         public long CarrierId { get; set; } = default!;
 
         /// <summary>
-        /// Preferred service identifier (shipment type).
+        /// Preferred service identifier (shipment type). Use 0 to retain the profile setting or select the default service.
         /// </summary>
         [JsonProperty("service_id")]
         public long ServiceId { get; set; } = default!;
 
         /// <summary>
-        /// Preferred paper type identifier.
+        /// Preferred paper type identifier. Omit or use 0 to retain the profile setting.
         /// </summary>
         [JsonProperty("paper_id")]
         public long? PaperId { get; set; }
@@ -48,7 +48,7 @@ namespace Postivo.Models.Components
         public bool? DuplexPrint { get; set; }
 
         /// <summary>
-        /// Preferred envelope size/template identifier defined in the user account.
+        /// Preferred envelope size/template identifier defined in the user account. Omit or use 0 to retain the profile setting.
         /// </summary>
         [JsonProperty("envelope_id")]
         public long? EnvelopeId { get; set; }

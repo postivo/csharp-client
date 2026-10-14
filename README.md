@@ -375,7 +375,7 @@ catch (System.Net.Http.HttpRequestException ex)
 
 **Primary exceptions:**
 * [`ClientException`](./src/Postivo/Models/Errors/ClientException.cs): The base class for HTTP error responses.
-  * [`ErrorResponse`](./src/Postivo/Models/Errors/ErrorResponse.cs): Problem Details object (RFC 9457) describing the error.
+  * [`ErrorResponse`](./src/Postivo/Models/Errors/ErrorResponse.cs): Problem Details object (RFC 9457) describing the error. See the [error catalog](https://api.postivo.pl/problems/) for problem types and recovery steps.
 
 <details><summary>Less common exceptions (2)</summary>
 

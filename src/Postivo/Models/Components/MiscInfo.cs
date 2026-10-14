@@ -13,7 +13,7 @@ namespace Postivo.Models.Components
     using Postivo.Utils;
 
     /// <summary>
-    /// Additional shipment metadata. At least one of `order_name` or `mpk` must be provided.
+    /// Optional shipment metadata. An empty object is allowed. Omitted or null fields supply no metadata; the string "0" is preserved.
     /// </summary>
     public class MiscInfo
     {

@@ -23,12 +23,12 @@ namespace Postivo.Models.Components
         /// Single shipment details.
         /// </summary>
         [JsonProperty("shipment_details")]
-        public ShipmentDetails? ShipmentDetails { get; set; }
+        public ShipmentDetails ShipmentDetails { get; set; } = default!;
 
         /// <summary>
         /// List of status events for the shipment.
         /// </summary>
-        [JsonProperty("status_events")]
-        public List<StatusEvent>? StatusEvents { get; set; } = null;
+        [JsonProperty("status_events", NullValueHandling = NullValueHandling.Include)]
+        public List<StatusEvent>? StatusEvents { get; set; }
     }
 }

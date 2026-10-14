@@ -22,18 +22,19 @@ namespace Postivo.Models.Components
         /// Shipment ID.
         /// </summary>
         [JsonProperty("id")]
-        public string? Id { get; set; }
+        public string Id { get; set; } = default!;
 
         /// <summary>
-        /// Cancellation status code (`204` if cancelled successfully; otherwise an error code).
+        /// Per-shipment status: `204` when cancelled, `404` when missing, `409` when the current state prevents cancellation, `500` after a technical failure whose transaction was successfully rolled back. A processed batch returns HTTP 200.
         /// </summary>
         [JsonProperty("status")]
-        public long? Status { get; set; }
+        public long Status { get; set; } = default!;
 
         /// <summary>
-        /// Problem Details object (RFC 9457) describing the error.
+        /// Problem Details object (RFC 9457) describing the error. See the <a href="https://api.postivo.pl/problems/">error catalog</a> for problem types and recovery steps.<br/>
+        /// <see href="https://api.postivo.pl/problems/">Error catalog and operation results</see>
         /// </summary>
-        [JsonProperty("error")]
-        public Models.Components.ErrorResponse? Error { get; set; } = null;
+        [JsonProperty("error", NullValueHandling = NullValueHandling.Include)]
+        public Models.Components.ErrorResponse? Error { get; set; }
     }
 }

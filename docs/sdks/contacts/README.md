@@ -14,7 +14,7 @@
 
 ## List
 
-Retrieve a paginated list of all contacts defined in your account’s **Address Book**.
+Retrieve a paginated list of contacts defined in your account's **Address Book**. An Address Book without contacts returns an empty list.
 
 ### Example Usage
 
@@ -48,12 +48,13 @@ var res = await sdk.AddressBook.Contacts.ListAsync(
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 4XX                       | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## Add
 
-Create a new contact in your account’s **Address Book**.
+Create a new contact in your account's **Address Book**. An optional external (custom) ID must be unique within the Address Book.
 
 ### Example Usage
 
@@ -100,12 +101,13 @@ var res = await sdk.AddressBook.Contacts.AddAsync(req);
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 409, 415, 4XX             | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## Get
 
-Get the details of a contact from your Address Book using its global `id`.
+Get the details of an Address Book contact using its system ID.
 
 ### Example Usage
 
@@ -135,12 +137,13 @@ var res = await sdk.AddressBook.Contacts.GetAsync(id: 14);
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 404, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 404, 4XX                       | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## Update
 
-Update a contact by its global ID.
+Update an Address Book contact using its system ID. Submitting unchanged details leaves the contact unchanged.
 
 ### Example Usage
 
@@ -179,7 +182,7 @@ var res = await sdk.AddressBook.Contacts.UpdateAsync(
 | Parameter                                     | Type                                          | Required                                      | Description                                   | Example                                       |
 | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
 | `Id`                                          | *long*                                        | :heavy_check_mark:                            | ID of the contact to update.                  | 14                                            |
-| `Contact`                                     | [Contact](../../Models/Components/Contact.md) | :heavy_check_mark:                            | A `Contact` object with the updated fields.   |                                               |
+| `Contact`                                     | [Contact](../../Models/Components/Contact.md) | :heavy_check_mark:                            | Updated contact details.                      |                                               |
 
 ### Response
 
@@ -189,12 +192,13 @@ var res = await sdk.AddressBook.Contacts.UpdateAsync(
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 404, 4XX             | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 404, 409, 415, 4XX        | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## Delete
 
-Remove a contact from your account by system ID.
+Remove an Address Book contact using its system ID.
 
 ### Example Usage
 
@@ -224,14 +228,13 @@ var res = await sdk.AddressBook.Contacts.DeleteAsync(id: 14);
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 404, 4XX             | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 404, 4XX                  | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## RemoveFromGroup
 
-Remove a contact from a group in your Address Book. This does not delete the contact; it only detaches the contact from the group.
-
-Provide the contact’s `id` and the group’s `group_id` parameters to perform the detachment.
+Remove a contact from an Address Book group using the contact and group system IDs. The contact remains in the Address Book.
 
 ### Example Usage
 
@@ -265,15 +268,13 @@ var res = await sdk.AddressBook.Contacts.RemoveFromGroupAsync(
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 404                                 | application/json                    |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 404, 4XX                  | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |
 
 ## AddToGroup
 
-Assign a contact to a group. If a contact and a group exist in your account, you can add the contact to that group.
-
-Provide the contact’s `id` and the group’s `group_id` parameters to perform the assignment.
+Assign a contact to an Address Book group using the contact and group system IDs. Both the contact and the group must exist in your Address Book.
 
 ### Example Usage
 
@@ -307,6 +308,6 @@ var res = await sdk.AddressBook.Contacts.AddToGroupAsync(
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| Postivo.Models.Errors.ErrorResponse | 404                                 | application/json                    |
-| Postivo.Models.Errors.ErrorResponse | 400, 401, 403, 4XX                  | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 401, 405                            | application/problem+json            |
+| Postivo.Models.Errors.ErrorResponse | 400, 403, 404, 4XX                  | application/problem+json            |
 | Postivo.Models.Errors.ErrorResponse | 5XX                                 | application/problem+json            |

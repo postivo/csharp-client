@@ -18,13 +18,13 @@ namespace Postivo.Models.Components
     public class RecipientFromAddressBookByExternalId
     {
         /// <summary>
-        /// External (custom) ID of the recipient stored in your Address Book.
+        /// External (custom) ID of the recipient stored in your Address Book. Use 1–16 ASCII letters, digits, underscores or hyphens; the string "0" is valid. An invalid format rejects the request with HTTP 400; an unavailable recipient with a valid ID remains an item processing error.
         /// </summary>
         [JsonProperty("ext_id")]
         public string ExtId { get; set; } = default!;
 
         /// <summary>
-        /// Set to true to fetch recipient data by external ID from inherited main account’s Address Book.
+        /// Set to true to fetch recipient data by external ID from inherited main account’s Address Book when permitted. Omit or use false to select your own Address Book. Null is not allowed.
         /// </summary>
         [JsonProperty("inherited")]
         public bool? Inherited { get; set; } = false;
@@ -36,7 +36,7 @@ namespace Postivo.Models.Components
         public string? CustomId { get; set; } = null;
 
         /// <summary>
-        /// Optional postscript printed above the recipient data on the envelope.
+        /// Optional postscript printed above the recipient data on the envelope. The string "0" is preserved.
         /// </summary>
         [JsonProperty("postscript")]
         public string? Postscript { get; set; } = null;
